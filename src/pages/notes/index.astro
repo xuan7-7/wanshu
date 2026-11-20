@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getNotesWithWords } from '../../utils/content';
+import Lucide from '../../components/Lucide.astro';
+
+const notes = await getNotesWithWords();
+---
+
+<Base title="知识笔记" description="专升本高等数学的复习笔记。">
+  <section class="reveal flex items-start gap-5">
+    <div class="min-w-0 flex-1">
+      <p class="kana mb-1">NOTES · ノート</p>
+      <span class="pill"><Lucide name="book" size={14} class="text-[#ff6f9c]" /> 知识笔记</span>
+      <h1 class="mt-3 font-cute text-3xl md:text-4xl">专升本高数复习记录</h1>
+      <p class="mt-3 max-w-2xl text-[#574d5f]">
+        广东普通专升本高等数学的复习记录，一章一章啃。
+      </p>
+    </div>
+    <img
+      src="/assets/art/star-portrait.webp"
+      alt=""
+      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
+      loading="lazy"
+    />
+  </section>
+
+  <div class="mt-10 space-y-5">
+    {
+      notes.map((note, index) => (
+        <a
+          href={`/notes/${note.id}/`}
+          class="reveal card card-lift flex flex-col gap-4 p-6 md:flex-row md:items-center"
+          style={`animation-delay: ${index * 70}ms`}
+        >
+          <span class="grid h-14 w-14 shrink-0 place-items-center rounded-[10px] border-[1.5px] border-[#2b2333] bg-[#ff9fbf] font-cute text-[11px] leading-tight text-[#2b2333]">
+            第<br />{String(note.data.order).padStart(2, '0')} 话
+          </span>
+          <div class="min-w-0 flex-1">
+            <span class="tag">{note.data.chapter}</span>
+            <h2 class="mt-2 font-cute text-xl leading-snug">{note.data.title}</h2>
+            <p class="mt-1 text-sm leading-relaxed text-[#574d5f]">{note.data.summary}</p>
+          </div>
+          <span class="text-sm text-[#7a6b74] md:text-right">{note.words} 字</span>
+        </a>
+      ))
+    }
+  </div>
+</Base>

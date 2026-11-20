@@ -1,0 +1,67 @@
+---
+import 'katex/dist/katex.min.css';
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { countWords, readingMinutes } from '../../utils/text';
+import { formatDate } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+const words = countWords(note.body ?? '');
+const minutes = readingMinutes(words);
+
+const all = await getCollection('notes');
+const sorted = all.sort((a, b) => a.data.order - b.data.order);
+const idx = sorted.findIndex((n) => n.id === note.id);
+const prev = sorted[idx - 1];
+const next = sorted[idx + 1];
+---
+
+<Base title={note.data.title} description={note.data.summary}>
+  <article class="reveal mx-auto max-w-[47rem]">
+    <a href="/notes/" class="text-sm text-[#ff6f9c] hover:underline">← 返回知识笔记</a>
+
+    <header class="mt-5 rounded-[28px] border border-[#ecdccd] bg-white/85 p-7 md:p-9">
+      <span class="chapter">第 {String(note.data.order).padStart(2, '0')} 话</span>
+      <h1 class="mt-3 font-cute text-3xl leading-snug md:text-4xl">{note.data.title}</h1>
+      <p class="mt-3 text-[#8a7a80]">{note.data.summary}</p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="pill">{formatDate(note.data.date)}</span>
+        <span class="pill">{words} 字</span>
+        <span class="pill">约 {minutes} 分钟读完</span>
+      </div>
+    </header>
+
+    <div class="prose-cute mt-6 rounded-[18px] border border-[#f1e3d8] bg-white/90 p-7 md:p-10">
+      <Content />
+    </div>
+
+    <nav class="mt-8 grid gap-3 sm:grid-cols-2">
+      {
+        prev ? (
+          <a href={`/notes/${prev.id}/`} class="card card-lift p-5">
+            <p class="text-xs text-[#b6a8bd]">上一篇</p>
+            <p class="mt-1 font-cute">{prev.data.title}</p>
+          </a>
+        ) : (
+          <div></div>
+        )
+      }
+      {
+        next ? (
+          <a href={`/notes/${next.id}/`} class="card card-lift p-5 sm:text-right">
+            <p class="text-xs text-[#b6a8bd]">下一篇</p>
+            <p class="mt-1 font-cute">{next.data.title}</p>
+          </a>
+        ) : (
+          <div></div>
+        )
+      }
+    </nav>
+  </article>
+</Base>

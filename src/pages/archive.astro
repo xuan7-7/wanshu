@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
+import Lucide from '../components/Lucide.astro';
+
+const notes = await getNotesWithWords();
+const diary = await getDiaryEntries();
+
+type Item = { type: string; title: string; href: string; date: Date };
+const items: Item[] = [
+  ...notes.map((n) => ({
+    type: '第 ' + String(n.data.order).padStart(2, '0') + ' 话',
+    title: n.data.title,
+    href: `/notes/${n.id}/`,
+    date: n.data.date,
+  })),
+  ...diary.map((d) => ({ type: '日记', title: d.data.title, href: '/diary/', date: d.data.date })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const byYear = new Map<number, Item[]>();
+for (const item of items) {
+  const year = item.date.getFullYear();
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(item);
+}
+const years = [...byYear.keys()].sort((a, b) => b - a);
+---
+
+<Base title="归档" description="全部笔记与日记的归档。">
+  <section class="reveal flex items-start gap-5">
+    <div class="min-w-0 flex-1">
+      <p class="kana mb-1">ARCHIVE · アーカイブ</p>
+      <span class="pill"><Lucide name="archive" size={14} class="text-[#ff6f9c]" /> 归档</span>
+      <h1 class="mt-3 font-cute text-3xl md:text-4xl">全部内容</h1>
+      <p class="mt-3 text-[#574d5f]">一共 {items.length} 篇，慢慢翻。</p>
+    </div>
+    <img
+      src="/assets/art/star-portrait.webp"
+      alt=""
+      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
+      loading="lazy"
+    />
+  </section>
+
+  <div class="mt-10 space-y-8">
+    {
+      years.map((year) => (
+        <section class="reveal">
+          <h2 class="font-cute text-2xl text-[#b8467a]">{year}</h2>
+          <div class="mt-3 space-y-2.5">
+            {byYear.get(year)!.map((item) => (
+              <a href={item.href} class="card card-lift flex items-center justify-between gap-4 p-4">
+                <span class="flex min-w-0 items-center gap-3">
+                  <span class="chapter shrink-0">{item.type}</span>
+                  <span class="truncate text-[#574d5f]">{item.title}</span>
+                </span>
+                <span class="shrink-0 text-xs text-[#7a6b74]">{formatDate(item.date)}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Base>

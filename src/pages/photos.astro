@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import Lucide from '../components/Lucide.astro';
+
+const shots = [
+  { src: '/assets/photos/sunset-frame-01.webp', alt: '黄昏时分，钢结构之间的一线夕阳', label: '黄昏 · 一', portrait: true },
+  { src: '/assets/photos/sunset-frame-02.webp', alt: '天边的晚霞与远处的楼影', label: '黄昏 · 二', portrait: false },
+];
+
+const emptySlots = [1, 2];
+---
+
+<Base title="摄影分享" description="七七拍下的一些光。">
+  <section class="reveal flex items-start gap-5">
+    <div class="min-w-0 flex-1">
+      <p class="kana mb-1">PHOTO · しゃしん</p>
+      <span class="pill"><Lucide name="camera" size={14} class="text-[#ff6f9c]" /> 摄影分享</span>
+      <h1 class="mt-3 font-cute text-3xl md:text-4xl">相框已经挂好了</h1>
+      <p class="mt-3 max-w-xl text-[#574d5f]">
+        拍到好看的光就挂上来。
+      </p>
+    </div>
+    <img
+      src="/assets/art/camera-girl.webp"
+      alt=""
+      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
+      loading="lazy"
+    />
+  </section>
+
+  <div class="mt-10 sm:columns-2 sm:gap-5 [&>figure]:mb-5 [&>figure]:break-inside-avoid">
+    {
+      shots.map((shot) => (
+        <figure class="reveal card p-3">
+          <img
+            src={shot.src}
+            alt={shot.alt}
+            class:list={['h-auto max-w-full rounded-[10px]', shot.portrait ? 'mx-auto max-h-[620px] w-auto' : 'w-full']}
+            loading="lazy"
+          />
+          <figcaption class="mt-3 flex items-center justify-between px-1 pb-1 text-sm text-[#7a6b74]">
+            <span class="font-cute">{shot.label}</span>
+            <span class="text-xs text-[#a898a2]">2026 · 11</span>
+          </figcaption>
+        </figure>
+      ))
+    }
+
+    {
+      emptySlots.map((slot) => (
+        <figure class="reveal card p-3">
+          <div class="grid aspect-[4/3] place-items-center rounded-[10px] border-2 border-dashed border-[#e8d6c8] bg-[#fffaf4]">
+            <span class="floaty"><Lucide name="image" size={28} class="text-[#ffc2d6]" /></span>
+          </div>
+          <figcaption class="mt-3 flex items-center justify-between px-1 pb-1 text-sm text-[#a898a2]">
+            <span class="font-cute">空相框 {String(slot).padStart(2, '0')}</span>
+            <span>等照片</span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</Base>

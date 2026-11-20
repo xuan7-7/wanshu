@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Lucide from '../components/Lucide.astro';
+
+const links = [{ name: '空空的位置', desc: '等我认识第一个写博客的人', href: '#' }];
+---
+
+<Base title="友链" description="万数屋的朋友们。">
+  <section class="reveal flex items-start gap-5">
+    <div class="min-w-0 flex-1">
+      <p class="kana mb-1">LINKS · リンク</p>
+      <span class="pill"><Lucide name="link" size={14} class="text-[#ff6f9c]" /> 友链</span>
+      <h1 class="mt-3 font-cute text-3xl md:text-4xl">路过的小屋</h1>
+      <p class="mt-3 text-[#574d5f]">这里还没有客人。如果你也有自己的小屋，欢迎在留言里告诉我。</p>
+    </div>
+    <img
+      src="/assets/art/moon-cat.webp"
+      alt=""
+      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
+      loading="lazy"
+    />
+  </section>
+
+  <div class="mt-10 grid gap-4 sm:grid-cols-2">
+    {
+      links.map((item) => (
+        <div class="reveal card p-6">
+          <p class="font-cute text-lg">{item.name}</p>
+          <p class="mt-1 text-sm text-[#574d5f]">{item.desc}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="reveal mt-8 flex flex-col items-center gap-3 rounded-[14px] border-[1.5px] border-dashed border-[#2b2333]/40 bg-white/60 p-8 text-center">
+    <span class="text-[#3f9c7c]"><Lucide name="sprout" size={30} /></span>
+    <p class="text-[#574d5f]">友链位空着，等你来填。</p>
+  </div>
+</Base>

@@ -1,0 +1,47 @@
+---
+import {
+  BookOpen,
+  Moon,
+  Camera,
+  Archive,
+  Tag,
+  Link2,
+  MessageSquare,
+  BarChart3,
+  Cat,
+  Sprout,
+  Image as ImageIcon,
+  Leaf,
+  Sparkles,
+  House,
+} from 'lucide-astro';
+
+interface Props {
+  name: 'home' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles';
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 18, class: className = '' } = Astro.props;
+
+const icons = {
+  home: House,
+  book: BookOpen,
+  moon: Moon,
+  camera: Camera,
+  archive: Archive,
+  tag: Tag,
+  link: Link2,
+  message: MessageSquare,
+  chart: BarChart3,
+  cat: Cat,
+  sprout: Sprout,
+  image: ImageIcon,
+  leaf: Leaf,
+  sparkles: Sparkles,
+};
+
+const Cmp = icons[name];
+---
+
+{ Cmp ? <Cmp size={size} stroke-width={1.9} class={className} /> : null }

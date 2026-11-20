@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { getNotesWithWords } from '../utils/content';
+import Lucide from '../components/Lucide.astro';
+
+type Note = Awaited<ReturnType<typeof getNotesWithWords>>[number];
+
+const notes = await getNotesWithWords();
+const map = new Map<string, Note[]>();
+for (const note of notes) {
+  for (const tag of note.data.tags) {
+    const list = map.get(tag) ?? [];
+    list.push(note);
+    map.set(tag, list);
+  }
+}
+const tags = [...map.entries()].sort((a, b) => b[1].length - a[1].length);
+---
+
+<Base title="标签" description="按标签浏览知识笔记。">
+  <section class="reveal flex items-start gap-5">
+    <div class="min-w-0 flex-1">
+      <p class="kana mb-1">TAGS · タグ</p>
+      <span class="pill"><Lucide name="tag" size={14} class="text-[#ff6f9c]" /> 标签</span>
+      <h1 class="mt-3 font-cute text-3xl md:text-4xl">按标签找</h1>
+      <p class="mt-3 text-[#574d5f]">同一类知识点集中在一起复习会更快。</p>
+    </div>
+    <img
+      src="/assets/art/star-portrait.webp"
+      alt=""
+      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
+      loading="lazy"
+    />
+  </section>
+
+  <div class="mt-6 flex flex-wrap gap-2">
+    {
+      tags.map(([tag, list]) => (
+        <a href={`#${tag}`} class="pill card-lift hover:border-[#ff9fbf] hover:text-[#b8467a]">
+          #{tag} <span class="text-[#7a6b74]">{list.length}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="mt-10 space-y-8">
+    {
+      tags.map(([tag, list]) => (
+        <section class="reveal" id={tag}>
+          <h2 class="font-cute text-2xl text-[#b8467a]">#{tag}</h2>
+          <div class="mt-3 grid gap-3 sm:grid-cols-2">
+            {list.map((note) => (
+              <a href={`/notes/${note.id}/`} class="card card-lift p-4">
+                <p class="font-cute text-[#2b2333]">{note.data.title}</p>
+                <p class="mt-1 text-xs text-[#7a6b74]">{note.data.chapter}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Base>
