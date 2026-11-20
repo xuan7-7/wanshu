@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import Lucide from '../components/Lucide.astro';
 
@@ -21,7 +22,7 @@ const emptySlots = [1, 2];
       </p>
     </div>
     <img
-      src="/assets/art/camera-girl.webp"
+      src={url('/assets/art/camera-girl.webp')}
       alt=""
       class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
       loading="lazy"
@@ -33,7 +34,7 @@ const emptySlots = [1, 2];
       shots.map((shot) => (
         <figure class="reveal card p-3">
           <img
-            src={shot.src}
+            src={url(shot.src)}
             alt={shot.alt}
             class:list={['h-auto max-w-full rounded-[10px]', shot.portrait ? 'mx-auto max-h-[620px] w-auto' : 'w-full']}
             loading="lazy"

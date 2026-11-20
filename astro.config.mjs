@@ -8,7 +8,8 @@ import rehypeKatex from 'rehype-katex';
 import vue from '@astrojs/vue';
 
 export default defineConfig({
-  site: 'https://77wanshuwu.pages.dev',
+  site: 'https://xuan7-7.github.io',
+  base: '/wanshu',
   integrations: [mdx(), sitemap(), vue()],
   markdown: {
     remarkPlugins: [remarkMath],

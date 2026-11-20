@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import Lucide from '../components/Lucide.astro';
 ---
@@ -12,7 +13,7 @@ import Lucide from '../components/Lucide.astro';
       <p class="mt-3 text-[#574d5f]">留言簿就放在门口，想写什么都可以。</p>
     </div>
     <img
-      src="/assets/art/chibi-cat.webp"
+      src={url('/assets/art/chibi-cat.webp')}
       alt=""
       class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
       loading="lazy"

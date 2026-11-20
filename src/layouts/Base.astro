@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import '../styles/global.css';
 import Lucide from '../components/Lucide.astro';
 
@@ -29,7 +30,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} · 七七的万数屋</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
   </head>
   <body>
     <div class="sakura-layer" aria-hidden="true">
@@ -45,7 +46,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       <nav
         class="flex w-full max-w-5xl items-center justify-between gap-3 rounded-full border border-white/80 bg-[#fffaf5]/70 px-4 py-2.5 shadow-[0_10px_30px_-18px_rgba(60,40,80,0.55)] backdrop-blur-xl backdrop-saturate-150"
       >
-        <a href="/" class="flex shrink-0 items-center gap-2.5">
+        <a href={url('/')} class="flex shrink-0 items-center gap-2.5">
           <span
             class="grid h-8 w-8 place-items-center rounded-full bg-[radial-gradient(circle_at_32%_30%,#fff,#ff9fbf_70%)] text-sm shadow-[inset_0_0_0_2px_rgba(255,255,255,0.8)]"
           >
@@ -58,7 +59,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
           {
             nav.map((item) => (
               <a
-                href={item.href}
+                href={url(item.href)}
                 class:list={[
                   'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 transition-colors duration-150 sm:px-3',
                   isActive(item.href)
@@ -83,10 +84,10 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       <p class="font-cute text-base text-[#c98aa8]">✿ 万物有数 ✿</p>
       <p class="mt-1">七七的万数屋 · 知识、日子与光</p>
       <p class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
-        <a class="hover:text-[#ff6f9c]" href="/archive/">归档</a>
-        <a class="hover:text-[#ff6f9c]" href="/tags/">标签</a>
-        <a class="hover:text-[#ff6f9c]" href="/links/">友链</a>
-        <a class="hover:text-[#ff6f9c]" href="/stats/">统计</a>
+        <a class="hover:text-[#ff6f9c]" href={url('/archive/')}>归档</a>
+        <a class="hover:text-[#ff6f9c]" href={url('/tags/')}>标签</a>
+        <a class="hover:text-[#ff6f9c]" href={url('/links/')}>友链</a>
+        <a class="hover:text-[#ff6f9c]" href={url('/stats/')}>统计</a>
       </p>
     </footer>
 

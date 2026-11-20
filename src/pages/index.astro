@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import { getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
@@ -41,7 +42,7 @@ const more = [
 <Base title="首页">
   <section class="reveal relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#101328]">
     <img
-      src="/assets/art/hero-star.webp"
+      src={url('/assets/art/hero-star.webp')}
       alt="在夜空下作画的少女"
       class="absolute inset-0 h-full w-full object-cover object-[58%_40%]"
     />
@@ -57,8 +58,8 @@ const more = [
         知识、日子与光，都收在这间小屋子里。<br />万物有数，数不清的部分就先记在这里。
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
-        <a class="btn btn-solid" href="/notes/">去看看笔记</a>
-        <a class="btn btn-ghost" href="/about/">认识七七</a>
+        <a class="btn btn-solid" href={url('/notes/')}>去看看笔记</a>
+        <a class="btn btn-ghost" href={url('/about/')}>认识七七</a>
       </div>
     </div>
 
@@ -66,7 +67,7 @@ const more = [
       <div class="bubble !bg-white/95 font-cute text-[13px] text-[#2b2333]">要一起复习吗？</div>
     </div>
     <img
-      src="/assets/art/chibi-cat.webp"
+      src={url('/assets/art/chibi-cat.webp')}
       alt="七七"
       class="pointer-events-none absolute -bottom-2 right-6 hidden h-36 w-auto rounded-t-[18px] border-[1.5px] border-b-0 border-[#2b2333] bg-[#f6e6d0] md:block"
     />
@@ -76,12 +77,12 @@ const more = [
     {
       sections.map((section, index) => (
         <a
-          href={section.href}
+          href={url(section.href)}
           class="reveal card card-lift overflow-hidden"
           style={`transition-delay: ${index * 60}ms`}
         >
           <div class="h-32 overflow-hidden">
-            <img src={section.img} alt="" class="h-full w-full object-cover object-center" loading="lazy" />
+            <img src={url(section.img)} alt="" class="h-full w-full object-cover object-center" loading="lazy" />
           </div>
           <div class="p-5">
             <h2 class="font-cute text-lg">{section.title}</h2>
@@ -95,14 +96,14 @@ const more = [
   <section class="mt-16">
     <div class="reveal flex items-end justify-between">
       <p class="kana">NOTES · ノート</p><h2 class="sec-title">最新的笔记</h2>
-      <a href="/notes/" class="text-sm text-[#ff6f9c] hover:underline">全部 →</a>
+      <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">全部 →</a>
     </div>
 
     <div class="mt-4 grid gap-4 md:grid-cols-3">
       {
         notes.map((note, index) => (
           <a
-            href={`/notes/${note.id}/`}
+            href={url(`/notes/${note.id}/`)}
             class="reveal card card-lift flex flex-col p-6"
             style={`transition-delay: ${index * 70}ms`}
           >
@@ -117,7 +118,7 @@ const more = [
   </section>
 
   <section class="mt-16 grid gap-5 md:grid-cols-2">
-    <a href="/diary/" class="reveal card card-lift block overflow-hidden">
+    <a href={url('/diary/')} class="reveal card card-lift block overflow-hidden">
       <div class="flex items-center justify-between px-6 pt-5">
         <h2 class="font-cute text-xl">万数日记</h2>
         <span class="text-sm text-[#ff6f9c]">时间线 →</span>
@@ -126,7 +127,7 @@ const more = [
         latestDiary && (
           <div class="mt-4 flex items-center gap-4 px-6 pb-6">
             <img
-              src="/assets/art/moon-cat.webp"
+              src={url('/assets/art/moon-cat.webp')}
               alt=""
               class="h-20 w-20 shrink-0 rounded-2xl object-cover object-center"
               loading="lazy"
@@ -142,7 +143,7 @@ const more = [
       }
     </a>
 
-    <a href="/photos/" class="reveal card card-lift block overflow-hidden">
+    <a href={url('/photos/')} class="reveal card card-lift block overflow-hidden">
       <div class="flex items-center justify-between px-6 pt-5">
         <h2 class="font-cute text-xl">摄影分享</h2>
         <span class="text-sm text-[#ff6f9c]">去看看 →</span>
@@ -162,7 +163,7 @@ const more = [
       {
         more.map((item, index) => (
           <a
-            href={item.href}
+            href={url(item.href)}
             class="reveal card card-lift p-5"
             style={`transition-delay: ${index * 50}ms`}
           >

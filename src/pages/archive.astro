@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import { getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
@@ -35,7 +36,7 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
       <p class="mt-3 text-[#574d5f]">一共 {items.length} 篇，慢慢翻。</p>
     </div>
     <img
-      src="/assets/art/star-portrait.webp"
+      src={url('/assets/art/star-portrait.webp')}
       alt=""
       class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
       loading="lazy"
@@ -49,7 +50,7 @@ const years = [...byYear.keys()].sort((a, b) => b - a);
           <h2 class="font-cute text-2xl text-[#b8467a]">{year}</h2>
           <div class="mt-3 space-y-2.5">
             {byYear.get(year)!.map((item) => (
-              <a href={item.href} class="card card-lift flex items-center justify-between gap-4 p-4">
+              <a href={url(item.href)} class="card card-lift flex items-center justify-between gap-4 p-4">
                 <span class="flex min-w-0 items-center gap-3">
                   <span class="chapter shrink-0">{item.type}</span>
                   <span class="truncate text-[#574d5f]">{item.title}</span>

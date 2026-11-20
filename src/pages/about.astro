@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import Lucide from '../components/Lucide.astro';
 
@@ -28,7 +29,7 @@ const cards = [
         </p>
       </div>
       <img
-        src="/assets/art/chibi-cat.webp"
+        src={url('/assets/art/chibi-cat.webp')}
         alt="七七的 Q 版形象"
         class="mx-auto w-52 rounded-[1.4rem] object-cover shadow-[0_20px_40px_-30px_rgba(60,40,80,0.9)]"
         loading="lazy"
@@ -50,7 +51,7 @@ const cards = [
   <section class="mt-6 grid gap-4 sm:grid-cols-3">
     {
       cards.map((card, index) => (
-        <a href={card.href} class="reveal card card-lift p-6" style={`transition-delay: ${index * 55}ms`}>
+        <a href={url(card.href)} class="reveal card card-lift p-6" style={`transition-delay: ${index * 55}ms`}>
           <p class="w-fit text-[#ff6f9c]"><Lucide name={card.icon} size={22} /></p>
           <h3 class="mt-2 font-cute text-lg">{card.title}</h3>
           <p class="mt-1 text-sm text-[#8a7a80]">{card.desc}</p>

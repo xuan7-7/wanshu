@@ -1,4 +1,5 @@
 ---
+import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import { getNotesWithWords } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
@@ -17,7 +18,7 @@ const averageWords = notes.length ? Math.round(totalWords / notes.length) : 0;
       <p class="mt-3 text-[#574d5f]">来客多少，写了多少字，一目了然。</p>
     </div>
     <img
-      src="/assets/art/hero-star.webp"
+      src={url('/assets/art/hero-star.webp')}
       alt=""
       class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
       loading="lazy"

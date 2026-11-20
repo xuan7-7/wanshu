@@ -1,4 +1,5 @@
 ---
+import { url } from '../../utils/url';
 import Base from '../../layouts/Base.astro';
 import { getNotesWithWords } from '../../utils/content';
 import Lucide from '../../components/Lucide.astro';
@@ -17,7 +18,7 @@ const notes = await getNotesWithWords();
       </p>
     </div>
     <img
-      src="/assets/art/star-portrait.webp"
+      src={url('/assets/art/star-portrait.webp')}
       alt=""
       class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
       loading="lazy"
@@ -28,7 +29,7 @@ const notes = await getNotesWithWords();
     {
       notes.map((note, index) => (
         <a
-          href={`/notes/${note.id}/`}
+          href={url(`/notes/${note.id}/`)}
           class="reveal card card-lift flex flex-col gap-4 p-6 md:flex-row md:items-center"
           style={`animation-delay: ${index * 70}ms`}
         >
