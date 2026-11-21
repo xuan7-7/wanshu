@@ -1,6 +1,21 @@
 @import "tailwindcss";
-@import "@fontsource/zcool-kuaile/400.css";
-@import "@fontsource/zen-maru-gothic/400.css";
+
+/* 自托管子集字体（只含站内用到的字符，体积远小于整包） */
+@font-face {
+  font-family: 'ZCOOL KuaiLe';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/zcool-subset.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Zen Maru Gothic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/zen-subset.woff2') format('woff2');
+}
 
 @theme {
   --font-cute: "ZCOOL KuaiLe", "PingFang SC", "Microsoft YaHei", sans-serif;

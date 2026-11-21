@@ -3,6 +3,7 @@ import { url } from '../utils/url';
 import '../styles/global.css';
 import Lucide from '../components/Lucide.astro';
 import visitStats from '../data/visit-stats.json';
+import zcoolFont from '../assets/fonts/zcool-subset.woff2?url';
 
 interface Props {
   title: string;
@@ -47,6 +48,10 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
     <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>
     -->    <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>    <script defer src="https://events.vercount.one/js"></script>
+    <!-- 首屏背景预加载（按视口选择，避免多拉） -->
+    <link rel="preload" as="image" href={url('/assets/bg-phone.webp')} media="(max-width: 640px)" />
+    <link rel="preload" as="image" href={url('/assets/bg-desktop.webp')} media="(min-width: 1025px) and (min-aspect-ratio: 4/3)" />
+    <link rel="preload" as="image" href={url('/assets/bg-ultrawide.webp')} media="(min-width: 1440px) and (min-aspect-ratio: 21/9)" />    <link rel="preload" as="font" type="font/woff2" href={zcoolFont} crossorigin="anonymous" />
   </head>
   <body>
     <div class="site-bg" aria-hidden="true">
@@ -55,7 +60,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
         <source media="(max-width: 1024px) and (max-aspect-ratio: 4/5)" srcset={url('/assets/bg-tablet.webp')} />
         <source media="(min-aspect-ratio: 21/9)" srcset={url('/assets/bg-ultrawide.webp')} />
         <source media="(min-aspect-ratio: 4/3)" srcset={url('/assets/bg-desktop.webp')} />
-        <img src={url('/assets/bg-square.webp')} alt="" loading="eager" decoding="async" fetchpriority="low" />
+        <img src={url('/assets/bg-square.webp')} alt="" loading="eager" decoding="async" fetchpriority="high" />
       </picture>
       <span class="site-bg__scrim"></span>
     </div>
