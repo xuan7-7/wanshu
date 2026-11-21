@@ -43,16 +43,9 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
           document.documentElement.dataset.theme = 'light';
         }
       })();
-    </script>    <!-- 百度统计 -->
-    <script is:inline>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement('script');
-        hm.src = 'https://hm.baidu.com/hm.js?2ea4281010eb9012e559394c552a45e1';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>  </head>
+    </script>    <!-- 51LA 统计 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>  </head>
   <body>
     <div class="site-bg" aria-hidden="true">
       <picture>
@@ -213,11 +206,19 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
         </button>
       </div>
 
+      <div class="mt-6 flex justify-center">
+        <script
+          id="LA-DATA-WIDGET"
+          crossorigin="anonymous"
+          charset="UTF-8"
+          src="https://v6-widget.51.la/v6/3RtpzaFqygbXeAnR/quote.js?theme=0&col=true&f=12&badge=text&text=center"
+        ></script>
+      </div>
       <p class="mt-4 text-xs text-[#a898a2]">
         已经在这里开了 <span data-uptime class="tabular-nums">—</span>
       </p>
       <p class="mt-1 text-xs text-[#a898a2]">
-        总访客数 <span data-visitors class="tabular-nums">—</span> 人 · 总访问量 <span data-visit class="tabular-nums">—</span> 次
+        总访客数 <span data-visitors class="tabular-nums">—</span> 人
       </p>
 
       <p class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">

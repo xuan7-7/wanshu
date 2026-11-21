@@ -47,6 +47,8 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-round);
   font-size: 1rem;
   line-height: 1.85;
@@ -520,3 +522,11 @@ html[data-theme='dark'] [class*='border-[#ecdccd]'],
 html[data-theme='dark'] [class*='border-[#e6d8c9]'],
 html[data-theme='dark'] [class*='border-[#e8d6c8]'],
 html[data-theme='dark'] [class*='border-[#f2e2d6]'] { border-color: #332e42 !important; }
+/* 内容不足一屏时，页脚贴底，避免页脚下方露出大片背景 */
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  margin-top: auto;
+}
