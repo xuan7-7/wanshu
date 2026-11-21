@@ -15,18 +15,42 @@ const rendered = await Promise.all(
   <section class="reveal flex items-start gap-5">
     <div class="min-w-0 flex-1">
       <p class="kana mb-1">DIARY · ダイアリー</p>
-      <span class="pill"><Lucide name="moon" size={14} class="text-[#ff6f9c]" /> 万数日记</span>
+      <span class="pill"><Lucide name="notebook" size={14} class="text-[#ff6f9c]" /> 万数日记</span>
       <h1 class="mt-3 font-cute text-3xl md:text-4xl">时间线</h1>
       <p class="mt-3 text-[#574d5f]">日子一格一格往前走，能记下来的就先记下来。</p>
     </div>
-    <img
-      src={url('/assets/art/moon-cat.webp')}
-      alt=""
-      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
-      loading="lazy"
-    />
   </section>
 
+  <!-- GitHub 贡献热力图 -->
+  <section id="gh-heatmap" class="reveal mx-auto mt-12 hidden max-w-3xl">
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <p class="text-sm text-[#574d5f]">
+        过去一年在 GitHub 上贡献 <span id="gh-total" class="font-cute text-[#3f9c7c] tabular-nums">—</span> 次
+      </p>
+      <p class="kana">GITHUB · CONTRIBUTIONS</p>
+    </div>
+
+    <div class="mt-3 overflow-x-auto rounded-[12px] border-[1.5px] border-[#e6d8c9] bg-white p-3">
+      <div class="inline-block min-w-full">
+        <div id="gh-months" class="mb-1 flex gap-[3px] pl-7 text-[10px] text-[#7a6b74]"></div>
+        <div class="flex gap-2">
+          <div class="flex flex-col justify-between py-[1px] text-[10px] leading-[10px] text-[#7a6b74]">
+            <span>一</span><span>三</span><span>五</span><span>日</span>
+          </div>
+          <div id="gh-grid" class="grid grid-flow-col gap-[3px]"></div>
+        </div>
+        <div class="mt-2 flex items-center justify-end gap-1.5 pl-7 text-[10px] text-[#7a6b74]">
+          <span>更少</span>
+          <i class="h-[10px] w-[10px] rounded-[2px] bg-[#ebedf0]"></i>
+          <i class="h-[10px] w-[10px] rounded-[2px] bg-[#9be9a8]"></i>
+          <i class="h-[10px] w-[10px] rounded-[2px] bg-[#40c463]"></i>
+          <i class="h-[10px] w-[10px] rounded-[2px] bg-[#30a14e]"></i>
+          <i class="h-[10px] w-[10px] rounded-[2px] bg-[#216e39]"></i>
+          <span>更多</span>
+        </div>
+      </div>
+    </div>
+  </section>
   <div class="mx-auto mt-12 max-w-3xl">
     <ol class="border-t border-dashed border-[#e8d6c8]">
       {
@@ -53,4 +77,78 @@ const rendered = await Promise.all(
 
     <p class="mt-10 text-center text-sm text-[#a898a2]">—— 未完待续 ——</p>
   </div>
-</Base>
+  <script is:inline>
+    (() => {
+      const USER = 'xuan7-7';
+      const section = document.getElementById('gh-heatmap');
+      const grid = document.getElementById('gh-grid');
+      const months = document.getElementById('gh-months');
+      const totalEl = document.getElementById('gh-total');
+      if (!section || !grid || !months || !totalEl) return;
+
+      const LEVEL_BG = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'];
+      const MONTH_NAMES = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+      const render = (data) => {
+        const days = data.contributions || [];
+        if (!days.length) return;
+        totalEl.textContent = (data.total && (data.total.lastYear ?? data.total['lastYear'])) ?? '—';
+
+        grid.style.gridTemplateRows = 'repeat(7, 10px)';
+
+        const first = new Date(days[0].date + 'T00:00:00');
+        const startPad = first.getDay(); // 0=周日
+        const cells = [];
+        for (let i = 0; i < startPad; i++) cells.push(null);
+        days.forEach((d) => cells.push(d));
+        while (cells.length % 7 !== 0) cells.push(null);
+
+        const frag = document.createDocumentFragment();
+        cells.forEach((d) => {
+          const cell = document.createElement('i');
+          cell.style.width = '10px';
+          cell.style.height = '10px';
+          cell.style.borderRadius = '2px';
+          if (d) {
+            const level = Math.max(0, Math.min(4, Number(d.level) || 0));
+            cell.style.background = LEVEL_BG[level];
+            cell.title = d.date + '：' + (d.count || 0) + ' 次提交';
+          } else {
+            cell.style.background = 'transparent';
+          }
+          frag.appendChild(cell);
+        });
+        grid.appendChild(frag);
+
+        // 月份标签
+        const weekCount = cells.length / 7;
+        const labelFrag = document.createDocumentFragment();
+        let lastMonth = -1;
+        for (let w = 0; w < weekCount; w++) {
+          const sample = cells[w * 7 + 3] || cells[w * 7] || cells.find(Boolean);
+          const ref = cells.slice(w * 7, w * 7 + 7).find(Boolean);
+          const label = document.createElement('span');
+          label.style.width = '10px';
+          label.style.flex = '0 0 10px';
+          label.style.whiteSpace = 'nowrap';
+          label.style.overflow = 'visible';
+          if (ref) {
+            const m = new Date(ref.date + 'T00:00:00').getMonth();
+            if (m !== lastMonth) {
+              label.textContent = MONTH_NAMES[m];
+              lastMonth = m;
+            }
+          }
+          labelFrag.appendChild(label);
+        }
+        months.appendChild(labelFrag);
+
+        section.classList.remove('hidden');
+      };
+
+      fetch('https://github-contributions-api.jogruber.de/v4/' + USER + '?y=last')
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error('bad'))))
+        .then(render)
+        .catch(() => { section.classList.add('hidden'); });
+    })();
+  </script></Base>

@@ -1,0 +1,28 @@
+/* 移动端公式缩放：单独成文件，在文章页最后引入，确保覆盖 katex 默认字号 */
+@media (max-width: 767px) {
+  html .prose-cute {
+    font-size: 0.97rem;
+    line-height: 1.85;
+  }
+
+  html .prose-cute .katex {
+    font-size: 0.95em;
+  }
+
+  html .prose-cute .katex-display {
+    margin: 1em -0.25rem;
+    padding: 0.1rem 0.25rem 0.4rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  html .prose-cute .katex-display > .katex {
+    font-size: 0.95em;
+  }
+
+  html .prose-cute :where(td, th) .katex {
+    font-size: 0.85em;
+  }
+}
+
+

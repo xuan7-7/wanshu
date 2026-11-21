@@ -1,6 +1,8 @@
 ---
 import { url } from '../../utils/url';
+import { COUNTER_URL } from '../../utils/counter';
 import 'katex/dist/katex.min.css';
+import '../../styles/math-mobile.css';
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 import { countWords, readingMinutes } from '../../utils/text';
@@ -35,6 +37,7 @@ const next = sorted[idx + 1];
         <span class="pill">{formatDate(note.data.date)}</span>
         <span class="pill">{words} 字</span>
         <span class="pill">约 {minutes} 分钟读完</span>
+        <span class="pill">阅读 <span data-counter data-path={url(`/wanshu/notes/${note.id}/`)}>—</span></span>
       </div>
     </header>
 
@@ -65,4 +68,21 @@ const next = sorted[idx + 1];
       }
     </nav>
   </article>
-</Base>
+  <script is:inline define:vars={{ COUNTER_URL }}>
+    (() => {
+      const el = document.querySelector('[data-counter]');
+      if (!el) return;
+      const path = el.getAttribute('data-path') || '/';
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 3000);
+      fetch(COUNTER_URL + '/get?path=' + encodeURIComponent(path), { signal: controller.signal })
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error('bad status'))))
+        .then((data) => {
+          if (typeof data.count === 'number') el.textContent = data.count.toLocaleString('zh-CN');
+        })
+        .catch(() => {
+          el.textContent = '—';
+        })
+        .finally(() => clearTimeout(timer));
+    })();
+  </script></Base>

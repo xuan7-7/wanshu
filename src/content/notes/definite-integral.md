@@ -11,31 +11,49 @@ tags: [积分, 换元法, 分部积分, 面积体积, 广东专升本]
 
 若 $F'(x) = f(x)$，称 $F$ 是 $f$ 的一个原函数。全体原函数记作
 
-$$\int f(x)\,dx = F(x) + C$$
+$$
+\int f(x)\,dx = F(x) + C
+
+$$
 
 $C$ 不能丢——同一个函数的原函数有无穷多个，只差常数。
 
 ## 二、基本积分表
 
-$$\int x^a dx = \frac{x^{a+1}}{a+1} + C \ (a \ne -1),\qquad \int \frac{dx}{x} = \ln|x| + C$$
+$$
+\int x^a dx = \frac{x^{a+1}}{a+1} + C \ (a \ne -1),\qquad \int \frac{dx}{x} = \ln|x| + C
 
-$$\int e^x dx = e^x + C,\qquad \int a^x dx = \frac{a^x}{\ln a} + C$$
+$$
 
-$$\int \sin x\,dx = -\cos x + C,\qquad \int \cos x\,dx = \sin x + C$$
+$$
+\int \mathrm{e}^x dx = \mathrm{e}^x + C,\qquad \int a^x dx = \frac{a^x}{\ln a} + C
 
-$$\int \frac{dx}{1+x^2} = \arctan x + C,\qquad \int \frac{dx}{\sqrt{1-x^2}} = \arcsin x + C$$
+$$
+
+$$
+\int \sin x\,dx = -\cos x + C,\qquad \int \cos x\,dx = \sin x + C
+
+$$
+
+$$
+\int \frac{dx}{1+x^2} = \arctan x + C,\qquad \int \frac{dx}{\sqrt{1-x^2}} = \arcsin x + C
+
+$$
 
 这张表要能做到「看到就写」，它是后面所有技巧的原料。
 
 ## 三、第一类换元（凑微分）
 
-$$\int f(\varphi(x))\varphi'(x)\,dx = \int f(u)\,du$$
+$$
+\int f(\varphi(x))\varphi'(x)\,dx = \int f(u)\,du
+
+$$
 
 关键是把 $\varphi'(x)dx$ 凑成 $d\varphi(x)$。
 
-> 例：$\int x e^{x^2}dx$。注意到 $x\,dx = \frac{1}{2}d(x^2)$，令 $u = x^2$：
+> 例：$\int x \mathrm{e}^{x^2}dx$。注意到 $x\,dx = \frac{1}{2}d(x^2)$，令 $u = x^2$：
 >
-> $$\int x e^{x^2}dx = \frac{1}{2}\int e^u du = \frac{1}{2}e^{x^2} + C$$
+> $$\int x \mathrm{e}^{x^2}dx = \frac{1}{2}\int \mathrm{e}^u du = \frac{1}{2}\mathrm{e}^{x^2} + C$$
 
 ## 四、第二类换元（变量代换）
 
@@ -47,13 +65,16 @@ $$\int f(\varphi(x))\varphi'(x)\,dx = \int f(u)\,du$$
 
 **定积分换元时必须同时换上下限**，换完直接用新上下限算，不必再回代。
 
-> 例：$\displaystyle\int_0^1 x e^{x^2}dx$。令 $u=x^2$，$x:0\to1$ 对应 $u:0\to1$，
+> 例：$\displaystyle\int_0^1 x \mathrm{e}^{x^2}dx$。令 $u=x^2$，$x:0\to1$ 对应 $u:0\to1$，
 >
-> $$\frac{1}{2}\int_0^1 e^u du = \frac{e-1}{2}$$
+> $$\frac{1}{2}\int_0^1 \mathrm{e}^u du = \frac{e-1}{2}$$
 
 ## 五、分部积分
 
-$$\int u\,dv = uv - \int v\,du$$
+$$
+\int u\,dv = uv - \int v\,du
+
+$$
 
 选 $u$ 的口诀：**反对幂三指**（反三角、对数、幂函数、三角、指数），排在前面的优先当 $u$。
 
@@ -65,7 +86,10 @@ $$\int u\,dv = uv - \int v\,du$$
 
 **牛顿-莱布尼茨公式**把所有计算收归一处：
 
-$$\int_a^b f(x)\,dx = F(b) - F(a)$$
+$$
+\int_a^b f(x)\,dx = F(b) - F(a)
+
+$$
 
 常用性质：
 
@@ -85,35 +109,47 @@ $$\int_a^b f(x)\,dx = F(b) - F(a)$$
 
 **平面图形面积**（上下两曲线之间）：
 
-$$S = \int_a^b |f(x) - g(x)|\,dx$$
+$$
+S = \int_a^b |f(x) - g(x)|\,dx
+
+$$
 
 判断谁在上谁在下，必要时分段。
 
 **绕 $x$ 轴旋转的体积**（圆盘法）：
 
-$$V = \pi\int_a^b [f(x)]^2 dx$$
+$$
+V = \mathrm{\pi}\int_a^b [f(x)]^2 dx
+
+$$
 
 **绕 $y$ 轴旋转的体积**（柱壳法）：
 
-$$V = 2\pi\int_a^b x f(x)\,dx$$
+$$
+V = 2\mathrm{\pi}\int_a^b x f(x)\,dx
+
+$$
 
 做题第一步永远是**画图**。图画不对，上下限必错，后面全废。
 
 ## 八、三道典型例题
 
-**例 1**：$\displaystyle\int_0^{\pi/2}\sin^2 x\,dx$
+**例 1**：$\displaystyle\int_0^{\mathrm{\pi}/2}\sin^2 x\,dx$
 
-用半角公式降次：$\sin^2 x = \dfrac{1-\cos 2x}{2}$，得 $\dfrac{\pi}{4}$。
+用半角公式降次：$\sin^2 x = \frac{1-\cos 2x}{2}$，得 $\frac{\mathrm{\pi}}{4}$。
 
-**例 2**：$\displaystyle\int_0^1 xe^{-x}dx$
+**例 2**：$\displaystyle\int_0^1 x\mathrm{e}^{-x}dx$
 
-分部积分，取 $u=x$、$dv=e^{-x}dx$，得 $\left[-xe^{-x}\right]_0^1 + \int_0^1 e^{-x}dx = -e^{-1} + 1 - e^{-1} = 1 - \dfrac{2}{e}$。
+分部积分，取 $u=x$、$dv=\mathrm{e}^{-x}dx$，得 $\left[-x\mathrm{e}^{-x}\right]_0^1 + \int_0^1 \mathrm{e}^{-x}dx = -\mathrm{e}^{-1} + 1 - \mathrm{e}^{-1} = 1 - \frac{2}{e}$。
 
 **例 3**：求 $y=x^2$ 与 $y=x$ 围成的图形面积。
 
 交点为 $x=0$ 与 $x=1$，在 $(0,1)$ 上 $x > x^2$，故
 
-$$S = \int_0^1 (x - x^2)dx = \frac{1}{2} - \frac{1}{3} = \frac{1}{6}$$
+$$
+S = \int_0^1 (x - x^2)dx = \frac{1}{2} - \frac{1}{3} = \frac{1}{6}
+
+$$
 
 ## 九、易错点
 

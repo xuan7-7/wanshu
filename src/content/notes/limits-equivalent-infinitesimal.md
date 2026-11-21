@@ -21,7 +21,7 @@ tags: [极限, 等价无穷小, 重要极限, 广东专升本]
 
 $f(x)$ 在 $x \to a$ 时极限为 $A$，意思是：**只要 $x$ 足够靠近 $a$（但不等于 $a$），$f(x)$ 就能任意接近 $A$**。
 
-写成符号是 $\lim\limits_{x\to a} f(x) = A$。这里有个关键点：**极限与 $f(a)$ 取什么值无关**，甚至 $f(a)$ 可以没定义。所以 $\lim\limits_{x\to 1}\dfrac{x^2-1}{x-1}=2$，尽管原式在 $x=1$ 处是 $\frac{0}{0}$。
+写成符号是 $\lim\limits_{x\to a} f(x) = A$。这里有个关键点：**极限与 $f(a)$ 取什么值无关**，甚至 $f(a)$ 可以没定义。所以 $\lim\limits_{x\to 1}\frac{x^2-1}{x-1}=2$，尽管原式在 $x=1$ 处是 $\frac{0}{0}$。
 
 ## 三、左右极限与存在性
 
@@ -32,7 +32,10 @@ $x \to a$ 有左右两个方向：
 
 **极限存在的充分必要条件**是左右极限都存在且相等：
 
-$$\lim_{x\to a} f(x) = A \iff \lim_{x\to a^-} f(x) = \lim_{x\to a^+} f(x) = A$$
+$$
+\lim_{x\to a} f(x) = A \iff \lim_{x\to a^-} f(x) = \lim_{x\to a^+} f(x) = A
+
+$$
 
 > 例：$f(x) = \begin{cases} x+1, & x<1 \\ 2x, & x \ge 1 \end{cases}$，求 $x\to 1$ 的极限。
 >
@@ -56,33 +59,48 @@ $$\lim_{x\to a} f(x) = A \iff \lim_{x\to a^-} f(x) = \lim_{x\to a^+} f(x) = A$$
 
 ## 五、等价无穷小表（$x \to 0$）
 
-$$\sin x \sim x,\quad \tan x \sim x,\quad \arcsin x \sim x,\quad \arctan x \sim x$$
+$$
+\sin x \sim x,\quad \tan x \sim x,\quad \arcsin x \sim x,\quad \arctan x \sim x
 
-$$1-\cos x \sim \tfrac{1}{2}x^2,\quad \ln(1+x) \sim x,\quad e^x - 1 \sim x$$
+$$
 
-$$(1+x)^a - 1 \sim ax$$
+$$
+1-\cos x \sim \tfrac{1}{2}x^2,\quad \ln(1+x) \sim x,\quad \mathrm{e}^x - 1 \sim x
+
+$$
+
+$$
+(1+x)^a - 1 \sim ax
+
+$$
 
 **使用条件**：只能整体替换乘除因子。加减里单独替换是错的——因为低阶项被消掉后，真正起作用的可能是更高阶的项。
 
-> 反例：$\lim\limits_{x\to0}\dfrac{x - \sin x}{x^3}$。若把 $\sin x$ 换成 $x$，得 $0$，这是错的。正确答案是 $\frac{1}{6}$（需要洛必达或泰勒）。
+> 反例：$\lim\limits_{x\to0}\frac{x - \sin x}{x^3}$。若把 $\sin x$ 换成 $x$，得 $0$，这是错的。正确答案是 $\frac{1}{6}$（需要洛必达或泰勒）。
 
 ## 六、两个重要极限
 
 **第一个**：
 
-$$\lim_{x\to 0}\frac{\sin x}{x} = 1$$
+$$
+\lim_{x\to 0}\frac{\sin x}{x} = 1
 
-推论：$\lim\limits_{x\to0}\dfrac{\tan x}{x}=1$，$\lim\limits_{x\to0}\dfrac{\arcsin x}{x}=1$。
+$$
+
+推论：$\lim\limits_{x\to0}\frac{\tan x}{x}=1$，$\lim\limits_{x\to0}\frac{\arcsin x}{x}=1$。
 
 **第二个**（$1^\infty$ 型）：
 
-$$\lim_{x\to \infty}\left(1+\frac{1}{x}\right)^x = e$$
+$$
+\lim_{x\to \infty}\left(1+\frac{1}{x}\right)^x = e
 
-一切 $1^\infty$ 型都走这条路：凑出「$1 + \frac{1}{\text{某个量}}$」，指数取它的倒数，再取 $e$。
+$$
 
-> 例：$\lim\limits_{x\to\infty}\left(1+\dfrac{2}{x}\right)^{x}$
+一切 $1^\infty$ 型都走这条路：把括号里的那一坨记作 $u$，凑成 $1+\frac{1}{u}$ 的形状，指数取它的倒数，再取 $\mathrm{e}$。
+
+> 例：$\lim\limits_{x\to\infty}\left(1+\frac{2}{x}\right)^{x}$
 >
-> 设 $u = \frac{x}{2}$，则原式 $=\left[\left(1+\dfrac{1}{u}\right)^{u}\right]^{2} \to e^2$。
+> 设 $u = \frac{x}{2}$，则原式 $=\left[\left(1+\frac{1}{u}\right)^{u}\right]^{2} \to \mathrm{e}^2$。
 
 ## 七、求极限的固定流程
 
@@ -98,17 +116,17 @@ $$\lim_{x\to \infty}\left(1+\frac{1}{x}\right)^x = e$$
 
 ## 八、三道典型例题
 
-**例 1**：$\lim\limits_{x\to0}\dfrac{\sqrt{1+x}-1}{x}$
+**例 1**：$\lim\limits_{x\to0}\frac{\sqrt{1+x}-1}{x}$
 
-有理化：分子分母同乘 $\sqrt{1+x}+1$，得 $\dfrac{x}{x(\sqrt{1+x}+1)} \to \dfrac{1}{2}$。
+有理化：分子分母同乘 $\sqrt{1+x}+1$，得 $\frac{x}{x(\sqrt{1+x}+1)} \to \frac{1}{2}$。
 
-**例 2**：$\lim\limits_{x\to0}\dfrac{1-\cos 2x}{x\sin x}$
+**例 2**：$\lim\limits_{x\to0}\frac{1-\cos 2x}{x\sin x}$
 
 $1-\cos 2x \sim \frac{1}{2}(2x)^2 = 2x^2$，$x\sin x \sim x^2$，所以极限为 $2$。
 
-**例 3**：$\lim\limits_{x\to\infty}\left(\dfrac{x+1}{x-1}\right)^x$
+**例 3**：$\lim\limits_{x\to\infty}\left(\frac{x+1}{x-1}\right)^x$
 
-先拆：$\dfrac{x+1}{x-1} = 1 + \dfrac{2}{x-1}$，于是是 $1^\infty$ 型，结果为 $e^2$。
+先拆：$\frac{x+1}{x-1} = 1 + \frac{2}{x-1}$，于是是 $1^\infty$ 型，结果为 $\mathrm{e}^2$。
 
 ## 九、易错点清单
 

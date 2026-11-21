@@ -14,10 +14,20 @@ import {
   Leaf,
   Sparkles,
   House,
+  Github,
+  Mail,
+  Copy,
+  Check,
+  ExternalLink,
+  LayoutGrid,
+  List,
+  NotebookPen,
+  Sun,
+  MoonStar,
 } from 'lucide-astro';
 
 interface Props {
-  name: 'home' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles';
+  name: 'home' | 'github' | 'mail' | 'copy' | 'check' | 'external' | 'grid' | 'list' | 'notebook' | 'sun' | 'moon' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles';
   size?: number;
   class?: string;
 }
@@ -26,6 +36,16 @@ const { name, size = 18, class: className = '' } = Astro.props;
 
 const icons = {
   home: House,
+  github: Github,
+  mail: Mail,
+  copy: Copy,
+  check: Check,
+  external: ExternalLink,
+  grid: LayoutGrid,
+  list: List,
+  notebook: NotebookPen,
+  sun: Sun,
+  moon: MoonStar,
   book: BookOpen,
   moon: Moon,
   camera: Camera,

@@ -11,7 +11,10 @@ tags: [导数, 复合函数, 洛必达, 中值定理, 广东专升本]
 
 设 $y = f(x)$ 在 $x_0$ 的某邻域内有定义，如果极限
 
-$$f'(x_0) = \lim_{\Delta x \to 0}\frac{f(x_0+\Delta x) - f(x_0)}{\Delta x}$$
+$$
+f'(x_0) = \lim_{\Delta x \to 0}\frac{f(x_0+\Delta x) - f(x_0)}{\Delta x}
+
+$$
 
 存在，就称 $f$ 在 $x_0$ 处可导，该极限就是导数。
 
@@ -19,9 +22,9 @@ $$f'(x_0) = \lim_{\Delta x \to 0}\frac{f(x_0+\Delta x) - f(x_0)}{\Delta x}$$
 
 这个定义在考试里不会被直接要求求导，但会以变形题出现：
 
-> 例：已知 $f'(x_0) = 2$，求 $\lim\limits_{h\to0}\dfrac{f(x_0+3h)-f(x_0)}{h}$。
+> 例：已知 $f'(x_0) = 2$，求 $\lim\limits_{h\to0}\frac{f(x_0+3h)-f(x_0)}{h}$。
 >
-> 凑成定义：$= 3\lim\limits_{h\to0}\dfrac{f(x_0+3h)-f(x_0)}{3h} = 3f'(x_0) = 6$。
+> 凑成定义：$= 3\lim\limits_{h\to0}\frac{f(x_0+3h)-f(x_0)}{3h} = 3f'(x_0) = 6$。
 
 ## 二、可导与连续的关系
 
@@ -33,25 +36,43 @@ $$f'(x_0) = \lim_{\Delta x \to 0}\frac{f(x_0+\Delta x) - f(x_0)}{\Delta x}$$
 
 ## 三、基本求导公式
 
-$$(C)' = 0,\qquad (x^a)' = ax^{a-1}$$
+$$
+(C)' = 0,\qquad (x^a)' = ax^{a-1}
 
-$$(e^x)' = e^x,\qquad (a^x)' = a^x\ln a,\qquad (\ln x)' = \frac{1}{x}$$
+$$
 
-$$(\sin x)' = \cos x,\qquad (\cos x)' = -\sin x,\qquad (\tan x)' = \sec^2 x$$
+$$
+(\mathrm{e}^x)' = \mathrm{e}^x,\qquad (a^x)' = a^x\ln a,\qquad (\ln x)' = \frac{1}{x}
 
-$$(\arcsin x)' = \frac{1}{\sqrt{1-x^2}},\qquad (\arctan x)' = \frac{1}{1+x^2}$$
+$$
+
+$$
+(\sin x)' = \cos x,\qquad (\cos x)' = -\sin x,\qquad (\tan x)' = \sec^2 x
+
+$$
+
+$$
+(\arcsin x)' = \frac{1}{\sqrt{1-x^2}},\qquad (\arctan x)' = \frac{1}{1+x^2}
+
+$$
 
 ## 四、四则运算与链式法则
 
-$$(u \pm v)' = u' \pm v',\qquad (uv)' = u'v + uv',\qquad \left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2}$$
+$$
+(u \pm v)' = u' \pm v',\qquad (uv)' = u'v + uv',\qquad \left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^2}
+
+$$
 
 复合函数是重点，一層一层剥：
 
-$$\frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}$$
+$$
+\frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}
+
+$$
 
 > 例：$y = \ln(\sin 2x)$
 >
-> 外层 $\ln$，中层 $\sin$，内层 $2x$，所以 $y' = \dfrac{1}{\sin 2x}\cdot\cos 2x\cdot 2 = 2\cot 2x$。
+> 外层 $\ln$，中层 $\sin$，内层 $2x$，所以 $y' = \frac{1}{\sin 2x}\cdot\cos 2x\cdot 2 = 2\cot 2x$。
 
 写完后默念一句「还有没有没剥完的」，能堵住大部分漏乘系数的错。
 
@@ -59,11 +80,14 @@ $$\frac{dy}{dx} = \frac{dy}{du}\cdot\frac{du}{dx}$$
 
 **隐函数**：$F(x,y)=0$ 两边对 $x$ 求导，把 $y$ 看作 $x$ 的函数，最后解出 $y'$。
 
-> 例：$x^2 + y^2 = 1$，两边求导得 $2x + 2yy' = 0$，故 $y' = -\dfrac{x}{y}$。
+> 例：$x^2 + y^2 = 1$，两边求导得 $2x + 2yy' = 0$，故 $y' = -\frac{x}{y}$。
 
 **参数方程**：$\begin{cases} x = \varphi(t) \\ y = \psi(t)\end{cases}$，则
 
-$$\frac{dy}{dx} = \frac{\psi'(t)}{\varphi'(t)}$$
+$$
+\frac{dy}{dx} = \frac{\psi'(t)}{\varphi'(t)}
+
+$$
 
 求二阶导时，是对 $t$ 再求一次导后**再除以** $\varphi'(t)$，这是最常丢分的地方。
 
@@ -71,7 +95,10 @@ $$\frac{dy}{dx} = \frac{\psi'(t)}{\varphi'(t)}$$
 
 只处理 $\frac{0}{0}$ 与 $\frac{\infty}{\infty}$：
 
-$$\lim\frac{f(x)}{g(x)} = \lim\frac{f'(x)}{g'(x)}$$
+$$
+\lim\frac{f(x)}{g(x)} = \lim\frac{f'(x)}{g'(x)}
+
+$$
 
 三个使用前提：分子分母同时趋于 $0$ 或 $\infty$；在去心邻域内可导且 $g'(x) \ne 0$；右边极限存在或为无穷。
 
@@ -83,17 +110,23 @@ $$\lim\frac{f(x)}{g(x)} = \lim\frac{f'(x)}{g'(x)}$$
 
 **拉格朗日中值定理**：
 
-$$f(b) - f(a) = f'(\xi)(b-a),\quad \xi \in (a,b)$$
+$$
+f(b) - f(a) = f'(\xi)(b-a),\quad \xi \in (a,b)
+
+$$
 
 专升本的考法几乎只有一种：**证明不等式**。做法是把要证的不等式整理成
 
-$$\frac{f(b)-f(a)}{b-a}$$
+$$
+\frac{f(b)-f(a)}{b-a}
+
+$$
 
 的形状，套中值定理，再估计 $f'(\xi)$ 的范围。
 
 > 例：证明当 $x>0$ 时 $\ln(1+x) < x$。
 >
-> 令 $f(t)=\ln(1+t)$，在 $[0,x]$ 上用拉格朗日定理：$\ln(1+x)-\ln 1 = \dfrac{1}{1+\xi}x$，其中 $\xi \in (0,x)$。因 $\dfrac{1}{1+\xi}<1$，故 $\ln(1+x) < x$。
+> 令 $f(t)=\ln(1+t)$，在 $[0,x]$ 上用拉格朗日定理：$\ln(1+x)-\ln 1 = \frac{1}{1+\xi}x$，其中 $\xi \in (0,x)$。因 $\frac{1}{1+\xi}<1$，故 $\ln(1+x) < x$。
 
 ## 八、单调性、极值与最值
 

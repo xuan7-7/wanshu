@@ -1,14 +1,14 @@
 ---
-import { url } from '../../utils/url';
 import Base from '../../layouts/Base.astro';
 import { getNotesWithWords } from '../../utils/content';
+import { url } from '../../utils/url';
 import Lucide from '../../components/Lucide.astro';
 
 const notes = await getNotesWithWords();
 ---
 
 <Base title="知识笔记" description="专升本高等数学的复习笔记。">
-  <section class="reveal flex items-start gap-5">
+  <section class="reveal flex items-start justify-between gap-5">
     <div class="min-w-0 flex-1">
       <p class="kana mb-1">NOTES · ノート</p>
       <span class="pill"><Lucide name="book" size={14} class="text-[#ff6f9c]" /> 知识笔记</span>
@@ -17,21 +17,38 @@ const notes = await getNotesWithWords();
         广东普通专升本高等数学的复习记录，一章一章啃。
       </p>
     </div>
-    <img
-      src={url('/assets/art/star-portrait.webp')}
-      alt=""
-      class="mt-1 hidden h-24 w-24 shrink-0 rounded-[14px] border-[1.5px] border-[#2b2333] object-cover object-top md:block"
-      loading="lazy"
-    />
+
+    <div class="flex shrink-0 items-center gap-1 rounded-full border-[1.5px] border-[#2b2333] bg-white p-1" role="group" aria-label="切换布局">
+      <button
+        type="button"
+        id="view-list"
+        data-view="list"
+        aria-pressed="false"
+        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors duration-150"
+      >
+        <Lucide name="list" size={13} />
+        列表
+      </button>
+      <button
+        type="button"
+        id="view-grid"
+        data-view="grid"
+        aria-pressed="true"
+        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors duration-150"
+      >
+        <Lucide name="grid" size={13} />
+        宫格
+      </button>
+    </div>
   </section>
 
-  <div class="mt-10 space-y-5">
+  <!-- 列表视图 -->
+  <div id="notes-list" class="mt-10 hidden space-y-5">
     {
-      notes.map((note, index) => (
+      notes.map((note) => (
         <a
           href={url(`/notes/${note.id}/`)}
           class="reveal card card-lift flex flex-col gap-4 p-6 md:flex-row md:items-center"
-          style={`animation-delay: ${index * 70}ms`}
         >
           <span class="grid h-14 w-14 shrink-0 place-items-center rounded-[10px] border-[1.5px] border-[#2b2333] bg-[#ff9fbf] font-cute text-[11px] leading-tight text-[#2b2333]">
             第<br />{String(note.data.order).padStart(2, '0')} 话
@@ -46,4 +63,65 @@ const notes = await getNotesWithWords();
       ))
     }
   </div>
+
+  <!-- 宫格视图 -->
+  <div id="notes-grid" class="mt-10 grid grid-cols-3 gap-2.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+    {
+      notes.map((note) => (
+        <a href={url(`/notes/${note.id}/`)} class="reveal card card-lift flex h-full flex-col p-3 sm:p-5">
+          <div class="hidden items-center justify-between sm:flex">
+            <span class="chapter">第 {String(note.data.order).padStart(2, '0')} 话</span>
+            <span class="text-[11px] text-[#a898a2]">{note.words} 字</span>
+          </div>
+          <h2 class="mt-0 font-cute text-[13px] leading-snug sm:mt-3 sm:text-lg">{note.data.title}</h2>
+          <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#574d5f] sm:block">{note.data.summary}</p>
+          <span class="mt-2 text-[10px] text-[#a898a2] sm:hidden">{note.words} 字</span>
+          <span class="mt-3 hidden items-center gap-1 text-xs text-[#b8467a] sm:inline-flex">
+            <Lucide name="book" size={12} />
+            {note.data.chapter}
+          </span>
+        </a>
+      ))
+    }
+  </div>
+
+  <script is:inline>
+    (() => {
+      const KEY = 'wanshu-notes-view';
+      const list = document.getElementById('notes-list');
+      const grid = document.getElementById('notes-grid');
+      const btnList = document.getElementById('view-list');
+      const btnGrid = document.getElementById('view-grid');
+      if (!list || !grid || !btnList || !btnGrid) return;
+
+      const active = ['bg-[#2f2740]', 'text-white'];
+      const idle = ['text-[#574d5f]'];
+
+      const apply = (view) => {
+        const isGrid = view === 'grid';
+        list.classList.toggle('hidden', isGrid);
+        grid.classList.toggle('hidden', !isGrid);
+        grid.classList.toggle('grid', isGrid);
+
+        [btnList, btnGrid].forEach((btn) => {
+          const on = (btn.dataset.view === 'grid') === isGrid;
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          active.forEach((c) => btn.classList.toggle(c, on));
+          idle.forEach((c) => btn.classList.toggle(c, !on));
+        });
+      };
+
+      let saved = 'grid';
+      try { saved = localStorage.getItem(KEY) || 'grid'; } catch {}
+      apply(saved);
+
+      [btnList, btnGrid].forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const view = btn.dataset.view || 'list';
+          apply(view);
+          try { localStorage.setItem(KEY, view); } catch {}
+        });
+      });
+    })();
+  </script>
 </Base>

@@ -32,19 +32,52 @@
 }
 
 html {
+  /* 全站比例缩放：按断点阶梯放大根字号，rem 尺寸整体等比 */
+  font-size: 15.5px;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
+@media (min-width: 768px) {
+  html { font-size: 16px; }
+}
+
+@media (min-width: 1280px) {
+  html { font-size: 17px; }
+}
+
 body {
   font-family: var(--font-round);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.85;
   color: var(--color-ink);
-  background: var(--color-paper);
+  background-color: var(--color-paper);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* 全站背景：图片在构建时预先模糊（运行时零 filter），固定一层不随滚动重绘 */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #f7ecdf;
+  pointer-events: none;
+}
+
+.site-bg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.site-bg__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 250, 244, 0.66);
 }
 
 @layer base {
@@ -299,7 +332,7 @@ body {
 
 /* ---------- article typography: measured to ~68 characters ---------- */
 .prose-cute {
-  font-size: 17px;
+  font-size: 1.06rem;
   line-height: 1.95;
   color: var(--color-ink-2);
   max-width: 68ch;
@@ -360,8 +393,130 @@ body {
 
 .prose-cute :where(th) { background: #fff7fa; color: var(--color-ink); }
 
-.prose-cute :where(.katex-display) {
+/* ---------- 数学排版（GB 3102 / ISO 80000-2 / AMS 实践） ---------- */
+.prose-cute {
+  /* 中文正文 1.5–2 倍行距，公式与文字混排不改变整段节奏 */
+  line-height: 1.9;
+  text-spacing-trim: space-all;
+}
+
+/* 行内公式：与正文同字号、不撑高行、两侧留 0.12em 间隙 */
+.prose-cute .katex {
+  font-size: 1.02em;
+  line-height: 1;
+  vertical-align: -0.08em;
+}
+
+.prose-cute p > .katex:first-child,
+.prose-cute p > .katex:last-child {
+  margin: 0;
+}
+
+.prose-cute :where(p) .katex {
+  margin: 0 0.12em;
+}
+
+/* 行间公式：居中、单独成行、上下各留约 1em、窄屏可横向滚动 */
+.prose-cute .katex-display {
+  display: block;
+  margin: 1.2em 0;
+  padding: 0.85em 1em;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.25rem 0;
+  text-align: center;
+  border: 1.5px solid #ecdfd2;
+  border-radius: 12px;
+  background: #fffdfa;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
+
+.prose-cute .katex-display > .katex {
+  font-size: 1.06em;
+}
+
+/* 表格内公式缩小，不换行 */
+.prose-cute :where(td, th) .katex {
+  font-size: 0.92em;
+  white-space: nowrap;
+}
+
+.prose-cute :where(td, th) .katex-display {
+  margin: 0.2em 0;
+}
+
+/* 列表里的公式与文字对齐，不撑开行距 */
+.prose-cute :where(li) .katex {
+  vertical-align: -0.08em;
+}
+
+/* 公式块前后的文字不被过度拉开 */
+.prose-cute :where(p) + .katex-display,
+.prose-cute .katex-display + :where(p) {
+  margin-top: 0.8em;
+}
+
+/* ---------- 日光 / 黑暗主题 ---------- */
+/* 浅色下显示月亮（点了变暗），深色下显示太阳（点了变亮） */
+.theme-icon--sun { display: none; }
+html[data-theme='dark'] .theme-icon--sun { display: block; }
+html[data-theme='dark'] .theme-icon--moon { display: none; }
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --color-ink: #ece7f5;
+  --color-ink-2: #c8c1d6;
+  --color-ink-3: #a49cb4;
+  --color-ink-4: #8d85a0;
+  --color-paper: #131119;
+  --color-white: #1c1926;
+}
+
+html[data-theme='dark'] body { background-color: #131119; }
+html[data-theme='dark'] .site-bg__scrim { background: rgba(12, 10, 18, 0.84); }
+
+html[data-theme='dark'] .card { background: #1c1926; border-color: #332e42; }
+html[data-theme='dark'] .pill,
+html[data-theme='dark'] .tag { background: #241f31; border-color: #3a3448; color: #cbb9d8; }
+html[data-theme='dark'] .chapter { background: #ece7f5; color: #1b1822; }
+html[data-theme='dark'] .btn-solid { background: #ff9fbf; color: #3a1f2b; }
+html[data-theme='dark'] .btn-ghost { background: #241f31; color: #f4c3d6; box-shadow: inset 0 0 0 1.5px #4a3a52; }
+html[data-theme='dark'] nav { background: rgba(24, 20, 32, 0.94) !important; border-color: #3a3448 !important; }
+html[data-theme='dark'] footer { background: #171420 !important; border-color: #2c2739 !important; }
+
+html[data-theme='dark'] .prose-cute { color: #cfc7dc; }
+html[data-theme='dark'] .prose-cute :where(blockquote) { background: #231d2e; border-color: #6b5a8f; color: #cfc6dd; }
+html[data-theme='dark'] .prose-cute :where(th, td) { border-color: #332e42; }
+html[data-theme='dark'] .prose-cute :where(th) { background: #221d2c; color: #e6dff0; }
+html[data-theme='dark'] .prose-cute :where(code) { background: #2a2233; color: #f2a9c6; }
+html[data-theme='dark'] .prose-cute .katex-display { background: #1b1723; border-color: #332e42; }
+
+/* 页面上写死的浅色（Tailwind 任意值）在暗色下统一压深 */
+html[data-theme='dark'] [class*='text-[#2b2333]'] { color: #ece7f5 !important; }
+html[data-theme='dark'] [class*='text-[#4b4056]'],
+html[data-theme='dark'] [class*='text-[#574d5f]'],
+html[data-theme='dark'] [class*='text-[#6d5d63]'] { color: #c8c1d6 !important; }
+html[data-theme='dark'] [class*='text-[#7a6b74]'],
+html[data-theme='dark'] [class*='text-[#8a7a80]'],
+html[data-theme='dark'] [class*='text-[#9b8a90]'] { color: #a49cb4 !important; }
+html[data-theme='dark'] [class*='text-[#a898a2]'],
+html[data-theme='dark'] [class*='text-[#b6a8bd]'] { color: #8d85a0 !important; }
+html[data-theme='dark'] [class*='text-[#b8467a]'] { color: #ffa8c8 !important; }
+
+html[data-theme='dark'] [class*='bg-white'] { background-color: #1c1926 !important; }
+html[data-theme='dark'] [class*='bg-[#fffaf5]'],
+html[data-theme='dark'] [class*='bg-[#fffaf4]'],
+html[data-theme='dark'] [class*='bg-[#fffdfa]'],
+html[data-theme='dark'] [class*='bg-[#fffafc]'] { background-color: #1c1926 !important; }
+html[data-theme='dark'] [class*='bg-[#f6e6d0]'] { background-color: #221d2c !important; }
+html[data-theme='dark'] [class*='bg-[#fff0f6]'],
+html[data-theme='dark'] [class*='bg-[#fff7fa]'],
+html[data-theme='dark'] [class*='bg-[#fff6fa]'] { background-color: #241f31 !important; }
+
+html[data-theme='dark'] [class*='border-[#ffe7d3]'],
+html[data-theme='dark'] [class*='border-[#f1e3d8]'],
+html[data-theme='dark'] [class*='border-[#ffe0ec]'],
+html[data-theme='dark'] [class*='border-[#ecdccd]'],
+html[data-theme='dark'] [class*='border-[#e6d8c9]'],
+html[data-theme='dark'] [class*='border-[#e8d6c8]'],
+html[data-theme='dark'] [class*='border-[#f2e2d6]'] { border-color: #332e42 !important; }

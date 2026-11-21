@@ -8,6 +8,7 @@ const notes = await getNotesWithWords();
 const diary = await getDiaryEntries();
 
 const totalWords = notes.reduce((sum, note) => sum + note.words, 0);
+const averageWords = notes.length ? Math.round(totalWords / notes.length) : 0;
 const latestDiary = diary[0];
 
 const sections = [
@@ -35,26 +36,17 @@ const more = [
   { href: '/archive/', label: '归档', desc: '按年份翻旧文' },
   { href: '/tags/', label: '标签', desc: '按主题找笔记' },
   { href: '/links/', label: '友链', desc: '路过的小屋' },
-  { href: '/guestbook/', label: '留言', desc: '随便说点什么' },
 ];
 ---
 
 <Base title="首页">
-  <section class="reveal relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#101328]">
-    <img
-      src={url('/assets/art/hero-star.webp')}
-      alt="在夜空下作画的少女"
-      class="absolute inset-0 h-full w-full object-cover object-[58%_40%]"
-    />
-    <div class="absolute inset-0 bg-[linear-gradient(96deg,rgba(10,12,30,0.97)_0%,rgba(10,12,30,0.92)_34%,rgba(10,12,30,0.55)_56%,rgba(10,12,30,0.08)_74%,rgba(10,12,30,0)_88%)]"></div>
-    <div class="halftone absolute inset-0"></div>
-
-    <div class="relative mx-auto flex min-h-[500px] max-w-5xl flex-col justify-center px-5 py-16 md:min-h-[560px]">
-      <span class="kana text-[#ffc2d6]">YOROKONDE · ようこそ万数屋へ</span>
-      <h1 class="mt-3 font-cute text-5xl leading-[1.15] text-white [text-shadow:0_2px_18px_rgba(8,10,26,0.75)] md:text-7xl">
+  <section class="reveal relative left-1/2 w-screen -translate-x-1/2 overflow-hidden">
+    <div class="relative mx-auto flex min-h-[clamp(360px,52vw,560px)] max-w-5xl flex-col justify-center px-[clamp(1rem,4vw,1.5rem)] py-16">
+      <span class="kana text-[#b8467a]">YOROKONDE · ようこそ万数屋へ</span>
+      <h1 class="mt-3 font-cute text-[clamp(2.5rem,5.4vw,4.6rem)] leading-[1.15] text-[#2b2333]">
         七七的<br class="md:hidden" /><span class="text-[#ff9fbf]">万数</span>屋
       </h1>
-      <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-[#efe6f7]/85">
+      <p class="mt-4 max-w-sm text-[15px] leading-relaxed text-[#4b4056]">
         知识、日子与光，都收在这间小屋子里。<br />万物有数，数不清的部分就先记在这里。
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
@@ -66,11 +58,6 @@ const more = [
     <div class="pointer-events-none absolute bottom-6 right-6 hidden md:block">
       <div class="bubble !bg-white/95 font-cute text-[13px] text-[#2b2333]">要一起复习吗？</div>
     </div>
-    <img
-      src={url('/assets/art/chibi-cat.webp')}
-      alt="七七"
-      class="pointer-events-none absolute -bottom-2 right-6 hidden h-36 w-auto rounded-t-[18px] border-[1.5px] border-b-0 border-[#2b2333] bg-[#f6e6d0] md:block"
-    />
   </section>
 
   <section class="mt-12 grid gap-5 sm:grid-cols-3">
@@ -116,48 +103,7 @@ const more = [
       }
     </div>
   </section>
-
-  <section class="mt-16 grid gap-5 md:grid-cols-2">
-    <a href={url('/diary/')} class="reveal card card-lift block overflow-hidden">
-      <div class="flex items-center justify-between px-6 pt-5">
-        <h2 class="font-cute text-xl">万数日记</h2>
-        <span class="text-sm text-[#ff6f9c]">时间线 →</span>
-      </div>
-      {
-        latestDiary && (
-          <div class="mt-4 flex items-center gap-4 px-6 pb-6">
-            <img
-              src={url('/assets/art/moon-cat.webp')}
-              alt=""
-              class="h-20 w-20 shrink-0 rounded-2xl object-cover object-center"
-              loading="lazy"
-            />
-            <div>
-              <p class="text-xs text-[#b6a8bd]">
-                {formatDate(latestDiary.data.date)} · {latestDiary.data.mood}
-              </p>
-              <p class="mt-1 font-cute text-lg">{latestDiary.data.title}</p>
-            </div>
-          </div>
-        )
-      }
-    </a>
-
-    <a href={url('/photos/')} class="reveal card card-lift block overflow-hidden">
-      <div class="flex items-center justify-between px-6 pt-5">
-        <h2 class="font-cute text-xl">摄影分享</h2>
-        <span class="text-sm text-[#ff6f9c]">去看看 →</span>
-      </div>
-      <div class="mt-4 flex items-center gap-4 px-6 pb-6">
-        <div class="grid h-20 w-20 shrink-0 place-items-center rounded-2xl border-2 border-dashed border-[#ffe0ea] bg-[#fffafc]">
-          <span class="text-[#ffc2d6]"><Lucide name="image" size={26} /></span>
-        </div>
-        <p class="text-sm leading-relaxed text-[#8a7a80]">照片还在冲洗，相框先挂好，等哪天撞见好看的光。</p>
-      </div>
-    </a>
-  </section>
-
-  <section class="mt-16">
+<section class="mt-16">
     <p class="kana reveal">MORE · そのほか</p><h2 class="reveal sec-title">逛一逛</h2>
     <div class="mt-4 grid gap-3 sm:grid-cols-4">
       {
@@ -174,19 +120,171 @@ const more = [
       }
     </div>
   </section>
+  <!-- 悬浮统计窗：可收起成头像按钮 -->
+  <div id="stats-widget" class="fixed right-3 top-1/2 z-[60] -translate-y-1/2 touch-none">
+    <section
+      id="stats-panel"
+      class="card w-[13.5rem] origin-bottom-right p-4 transition-transform duration-200"
+    >
+      <div class="flex items-center justify-between">
+        <p class="font-cute text-sm text-[#2b2333]">笔记的数字</p>
+        <button
+          type="button"
+          id="stats-collapse"
+          aria-label="收起"
+          class="grid h-6 w-6 place-items-center rounded-full border border-[#f2e2d6] text-[#7a6b74] hover:text-[#ff6f9c]"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 12h12" /></svg>
+        </button>
+      </div>
+      <dl class="mt-3 space-y-2 text-xs">
+        <div class="flex items-baseline justify-between">
+          <dt class="text-[#7a6b74]">全站总字数</dt>
+          <dd class="font-cute text-sm text-[#ff5c8d] tabular-nums">{totalWords.toLocaleString('zh-CN')}</dd>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <dt class="text-[#7a6b74]">平均每篇</dt>
+          <dd class="font-cute text-sm text-[#33406e] tabular-nums">{averageWords.toLocaleString('zh-CN')}</dd>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <dt class="text-[#7a6b74]">笔记篇数</dt>
+          <dd class="font-cute text-sm text-[#3f9c7c] tabular-nums">{notes.length}</dd>
+        </div>
+      </dl>
+    </section>
 
-  <section class="reveal mt-16 grid gap-6 rounded-[18px] border border-[#f1e3d8] bg-white/70 p-7 sm:grid-cols-3">
-    <div class="text-center">
-      <p class="font-cute text-3xl text-[#ff6f9c]">{totalWords.toLocaleString('zh-CN')}</p>
-      <p class="mt-1 text-sm text-[#8a7a80]">全站总字数</p>
-    </div>
-    <div class="text-center">
-      <p class="font-cute text-3xl text-[#5b8bd0]">{notes.length}</p>
-      <p class="mt-1 text-sm text-[#8a7a80]">知识笔记</p>
-    </div>
-    <div class="text-center">
-      <p class="font-cute text-3xl text-[#4fa982]">{diary.length}</p>
-      <p class="mt-1 text-sm text-[#8a7a80]">万数日记</p>
-    </div>
-  </section>
-</Base>
+    <button
+      type="button"
+      id="stats-open"
+      aria-label="展开统计"
+      class="hidden h-12 w-12 overflow-hidden rounded-[14px] border-[1.5px] border-[#2b2333] bg-[#fffaf5] shadow-[4px_4px_0_rgba(43,35,51,0.16)]"
+    >
+      <img src={url('/assets/avatar.webp')} alt="" draggable="false" class="pointer-events-none h-full w-full select-none object-cover" />
+    </button>
+  </div>
+
+  <script>
+    (() => {
+      const wrap = document.getElementById('stats-widget');
+      const panel = document.getElementById('stats-panel');
+      const openBtn = document.getElementById('stats-open');
+      const closeBtn = document.getElementById('stats-collapse');
+      if (!wrap || !panel || !openBtn || !closeBtn) return;
+
+      const COLLAPSE_KEY = 'wanshu-stats-collapsed';
+      const POS_KEY = 'wanshu-stats-pos';
+
+      /* 位置工具（全部先声明，避免初始化时引用未定义） */
+      const clampPos = (x: number, y: number) => {
+        const maxX = window.innerWidth - wrap.offsetWidth - 8;
+        const maxY = window.innerHeight - wrap.offsetHeight - 8;
+        return { x: Math.min(Math.max(8, x), Math.max(8, maxX)), y: Math.min(Math.max(8, y), Math.max(8, maxY)) };
+      };
+      const applyPos = (x: number, y: number) => {
+        const p = clampPos(x, y);
+        wrap.style.left = p.x + 'px';
+        wrap.style.top = p.y + 'px';
+        wrap.style.right = 'auto';
+        wrap.style.bottom = 'auto';
+        wrap.style.transform = 'none';
+      };
+      const savePos = () => {
+        try {
+          localStorage.setItem(POS_KEY, JSON.stringify({ x: parseFloat(wrap.style.left), y: parseFloat(wrap.style.top) }));
+        } catch {}
+      };
+      const withSnap = (fn: () => void) => {
+        wrap.style.transition = 'left 200ms ease, top 200ms ease';
+        fn();
+        setTimeout(() => { wrap.style.transition = ''; }, 220);
+      };
+      const snapToEdge = () => {
+        const r = wrap.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const targetX = cx < window.innerWidth / 2 ? 8 : window.innerWidth - r.width - 8;
+        withSnap(() => {
+          wrap.style.left = targetX + 'px';
+          wrap.style.top = r.top + 'px';
+          wrap.style.right = 'auto';
+          wrap.style.bottom = 'auto';
+          wrap.style.transform = 'none';
+        });
+        savePos();
+      };
+
+      const setCollapsed = (collapsed: boolean) => {
+        panel.classList.toggle('hidden', collapsed);
+        openBtn.classList.toggle('hidden', !collapsed);
+        try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch {}
+        if (collapsed) {
+          snapToEdge();
+        } else if (wrap.style.left) {
+          withSnap(() => applyPos(parseFloat(wrap.style.left), parseFloat(wrap.style.top)));
+        }
+      };
+
+      /* 拖动 */
+      let drag: { id: number; sx: number; sy: number; ox: number; oy: number } | null = null;
+      let dragged = false;
+      let suppressClick = false;
+
+      const onMove = (e: PointerEvent) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.sx;
+        const dy = e.clientY - drag.sy;
+        if (!dragged && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+        dragged = true;
+        e.preventDefault();
+        applyPos(drag.ox + dx, drag.oy + dy);
+      };
+      const onUp = (e: PointerEvent) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+        if (dragged) {
+          suppressClick = true;
+          if (panel.classList.contains('hidden')) snapToEdge();
+          else savePos();
+          setTimeout(() => { suppressClick = false; }, 0);
+        }
+        dragged = false;
+        drag = null;
+      };
+
+      wrap.addEventListener('pointerdown', (e) => {
+        const r = wrap.getBoundingClientRect();
+        drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top };
+        dragged = false;
+        window.addEventListener('pointermove', onMove, { passive: false });
+        window.addEventListener('pointerup', onUp);
+        window.addEventListener('pointercancel', onUp);
+      });
+
+      /* 按钮：先绑定，再做初始化 */
+      closeBtn.addEventListener('click', (e) => {
+        if (suppressClick) { e.preventDefault(); e.stopPropagation(); return; }
+        setCollapsed(true);
+      });
+      openBtn.addEventListener('click', (e) => {
+        if (suppressClick) { e.preventDefault(); e.stopPropagation(); return; }
+        setCollapsed(false);
+      });
+
+      window.addEventListener('resize', () => {
+        if (wrap.style.left) applyPos(parseFloat(wrap.style.left), parseFloat(wrap.style.top));
+      });
+
+      /* 初始化 */
+      let collapsed = false;
+      try { collapsed = localStorage.getItem(COLLAPSE_KEY) === '1'; } catch {}
+      try {
+        const saved = localStorage.getItem(POS_KEY);
+        if (saved) {
+          const p = JSON.parse(saved);
+          if (typeof p.x === 'number' && typeof p.y === 'number') applyPos(p.x, p.y);
+        }
+      } catch {}
+      setCollapsed(collapsed);
+    })();
+  </script></Base>
