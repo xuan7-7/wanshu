@@ -40,7 +40,7 @@ const more = [
 ---
 
 <Base title="首页">
-  <section class="reveal relative left-1/2 w-screen -translate-x-1/2 overflow-hidden">
+  <section class="reveal relative overflow-hidden">
     <div class="relative mx-auto flex min-h-[clamp(360px,52vw,560px)] max-w-5xl flex-col justify-center px-[clamp(1rem,4vw,1.5rem)] py-16">
       <span class="kana text-[#b8467a]">YOROKONDE · ようこそ万数屋へ</span>
       <h1 class="mt-3 font-cute text-[clamp(2.5rem,5.4vw,4.6rem)] leading-[1.15] text-[#2b2333]">
@@ -60,7 +60,7 @@ const more = [
     </div>
   </section>
 
-  <section class="mt-12 grid gap-5 sm:grid-cols-3">
+  <section class="mt-10 grid grid-cols-3 gap-2.5 sm:mt-12 sm:gap-5">
     {
       sections.map((section, index) => (
         <a
@@ -68,12 +68,12 @@ const more = [
           class="reveal card card-lift overflow-hidden"
           style={`transition-delay: ${index * 60}ms`}
         >
-          <div class="h-32 overflow-hidden">
+          <div class="h-16 overflow-hidden sm:h-32">
             <img src={url(section.img)} alt="" class="h-full w-full object-cover object-center" loading="lazy" />
           </div>
-          <div class="p-5">
-            <h2 class="font-cute text-lg">{section.title}</h2>
-            <p class="mt-1 text-sm text-[#8a7a80]">{section.desc}</p>
+          <div class="p-2 sm:p-5">
+            <h2 class="font-cute text-[12px] leading-tight sm:text-lg">{section.title}</h2>
+            <p class="mt-1 hidden text-sm text-[#8a7a80] sm:block">{section.desc}</p>
           </div>
         </a>
       ))
@@ -86,18 +86,18 @@ const more = [
       <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">全部 →</a>
     </div>
 
-    <div class="mt-4 grid gap-4 md:grid-cols-3">
+    <div class="mt-4 grid grid-cols-3 gap-2.5 md:gap-4">
       {
         notes.map((note, index) => (
           <a
             href={url(`/notes/${note.id}/`)}
-            class="reveal card card-lift flex flex-col p-6"
+            class="reveal card card-lift flex flex-col p-2 sm:p-6"
             style={`transition-delay: ${index * 70}ms`}
           >
-            <span class="tag">{note.data.chapter}</span>
-            <h3 class="mt-3 font-cute text-lg leading-snug">{note.data.title}</h3>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-[#8a7a80]">{note.data.summary}</p>
-            <span class="mt-4 text-xs text-[#b6a8bd]">{note.words} 字</span>
+            <span class="tag hidden sm:inline-block">{note.data.chapter}</span>
+            <h3 class="mt-0 font-cute text-[12px] leading-tight sm:mt-3 sm:text-lg sm:leading-snug">{note.data.title}</h3>
+            <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#8a7a80] sm:block">{note.data.summary}</p>
+            <span class="mt-2 text-[10px] text-[#b6a8bd] sm:mt-4 sm:text-xs">{note.words} 字</span>
           </a>
         ))
       }
@@ -105,16 +105,16 @@ const more = [
   </section>
 <section class="mt-16">
     <p class="kana reveal">MORE · そのほか</p><h2 class="reveal sec-title">逛一逛</h2>
-    <div class="mt-4 grid gap-3 sm:grid-cols-4">
+    <div class="mt-4 grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3">
       {
         more.map((item, index) => (
           <a
             href={url(item.href)}
-            class="reveal card card-lift p-5"
+            class="reveal card card-lift p-2 sm:p-5"
             style={`transition-delay: ${index * 50}ms`}
           >
-            <p class="font-cute text-lg">{item.label}</p>
-            <p class="mt-1 text-xs text-[#9b8a90]">{item.desc}</p>
+            <p class="font-cute text-[12px] leading-tight sm:text-lg">{item.label}</p>
+            <p class="mt-1 hidden text-xs text-[#9b8a90] sm:block">{item.desc}</p>
           </a>
         ))
       }

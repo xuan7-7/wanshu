@@ -43,6 +43,15 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
           document.documentElement.dataset.theme = 'light';
         }
       })();
+    </script>    <!-- 百度统计 -->
+    <script is:inline>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement('script');
+        hm.src = 'https://hm.baidu.com/hm.js?2ea4281010eb9012e559394c552a45e1';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
     </script>  </head>
   <body>
     <div class="site-bg" aria-hidden="true">
