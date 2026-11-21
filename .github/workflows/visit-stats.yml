@@ -1,0 +1,32 @@
+name: 访问统计同步
+
+on:
+  # 51LA 暂停使用期间不自动跑，需要时手动触发
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: 从 51LA 拉取并汇总
+        env:
+          LA_AK: ${{ secrets.LA_AK }}
+          LA_MASK_ID: ${{ secrets.LA_MASK_ID }}
+        run: node scripts/sync-visit-stats.mjs
+
+      - name: 提交
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/visit-stats.json
+          if git diff --cached --quiet; then
+            echo "无变化"
+          else
+            git commit -m "更新访问统计"
+            git push
+          fi

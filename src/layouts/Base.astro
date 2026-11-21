@@ -1,8 +1,8 @@
 ---
 import { url } from '../utils/url';
 import '../styles/global.css';
-import { COUNTER_URL } from '../utils/counter';
 import Lucide from '../components/Lucide.astro';
+import visitStats from '../data/visit-stats.json';
 
 interface Props {
   title: string;
@@ -43,9 +43,11 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
           document.documentElement.dataset.theme = 'light';
         }
       })();
-    </script>    <!-- 51LA 统计 -->
+    </script>    <!-- 51LA 统计（暂时停用，保留备用）
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
-    <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>  </head>
+    <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>
+    -->    <script is:inline>LA.init({ id: '3RtpzaFqygbXeAnR', ck: '3RtpzaFqygbXeAnR' });</script>    <script defer src="https://events.vercount.one/js"></script>
+  </head>
   <body>
     <div class="site-bg" aria-hidden="true">
       <picture>
@@ -103,7 +105,6 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
             ))
           }
         </div>
-
 
         <!-- 手机：首页 + 菜单按钮 -->
         <div class="flex items-center gap-1 md:hidden">
@@ -173,7 +174,6 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       </nav>
     </div>
 
-
     <main class="mx-auto w-full max-w-5xl px-[clamp(1rem,4vw,1.5rem)] pb-16 pt-24">
       <slot />
     </main>
@@ -205,20 +205,12 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
           <span id="copy-mail-label">xuan77ei@qq.com</span>
         </button>
       </div>
-
-      <div class="mt-6 flex justify-center">
-        <script
-          id="LA-DATA-WIDGET"
-          crossorigin="anonymous"
-          charset="UTF-8"
-          src="https://v6-widget.51.la/v6/3RtpzaFqygbXeAnR/quote.js?theme=0&col=true&f=12&badge=text&text=center"
-        ></script>
-      </div>
       <p class="mt-4 text-xs text-[#a898a2]">
         已经在这里开了 <span data-uptime class="tabular-nums">—</span>
       </p>
       <p class="mt-1 text-xs text-[#a898a2]">
-        总访客数 <span data-visitors class="tabular-nums">—</span> 人
+        总访客数 <span id="vercount_value_site_uv" class="tabular-nums">—</span> 人 · 总访问量 <span id="vercount_value_site_pv" class="tabular-nums">—</span> 次
+        <span id="vercount_value_page_pv" class="hidden">—</span>
       </p>
 
       <p class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs">
@@ -227,48 +219,6 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
         <a class="hover:text-[#ff6f9c]" href={url('/stats/')}>统计</a>
       </p>
     </footer>
-
-    <script is:inline define:vars={{ COUNTER_URL }}>
-      (() => {
-        const path = location.pathname.replace(/\/{2,}/g, '/');
-        const controller = new AbortController();
-        setTimeout(() => controller.abort(), 3000);
-
-        const visitEl = document.querySelector('[data-visit]');
-        const visitorsEl = document.querySelector('[data-visitors]');
-        fetch(COUNTER_URL + '/hit?path=' + encodeURIComponent(path), { signal: controller.signal })
-          .then((res) => (res.ok ? res.json() : Promise.reject(new Error('bad'))))
-          .then((data) => {
-            if (visitEl && typeof data.total === 'number') {
-              visitEl.textContent = data.total.toLocaleString('zh-CN');
-            }
-            if (visitorsEl && typeof data.visitors === 'number') {
-              visitorsEl.textContent = data.visitors.toLocaleString('zh-CN');
-            }
-          })
-          .catch(() => {
-            if (visitEl) visitEl.textContent = '—';
-            if (visitorsEl) visitorsEl.textContent = '—';
-          });
-      })();
-
-      (() => {
-        const START = Date.parse('2026-11-20T22:00:00Z');
-        const el = document.querySelector('[data-uptime]');
-        if (!el || Number.isNaN(START)) return;
-        const pad = (n) => String(n).padStart(2, '0');
-        const render = () => {
-          const diff = Math.max(0, Date.now() - START);
-          const s = Math.floor(diff / 1000);
-          const d = Math.floor(s / 86400);
-          const h = Math.floor((s % 86400) / 3600);
-          const m = Math.floor((s % 3600) / 60);
-          el.textContent = `${d} 天 ${pad(h)} 小时 ${pad(m)} 分 ${pad(s % 60)} 秒`;
-        };
-        render();
-        setInterval(render, 1000);
-      })();
-    </script>
 
     <script>
             const navToggle = document.getElementById('nav-toggle') as HTMLButtonElement | null;
@@ -352,6 +302,24 @@ const targets = document.querySelectorAll<HTMLElement>('.reveal');
           document.documentElement.dataset.theme = next;
           try { localStorage.setItem(KEY, next); } catch {}
         });
+      })();
+    </script>
+    <script is:inline>
+      (() => {
+        const START = Date.parse('2026-11-20T22:00:00Z');
+        const el = document.querySelector('[data-uptime]');
+        if (!el || Number.isNaN(START)) return;
+        const pad = (n) => String(n).padStart(2, '0');
+        const render = () => {
+          const diff = Math.max(0, Date.now() - START);
+          const s = Math.floor(diff / 1000);
+          const d = Math.floor(s / 86400);
+          const h = Math.floor((s % 86400) / 3600);
+          const m = Math.floor((s % 3600) / 60);
+          el.textContent = `${d} 天 ${pad(h)} 小时 ${pad(m)} 分 ${pad(s % 60)} 秒`;
+        };
+        render();
+        setInterval(render, 1000);
       })();
     </script>
   </body>
