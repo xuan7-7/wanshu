@@ -5,7 +5,8 @@ import '../../styles/math-mobile.css';
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
 import { countWords, readingMinutes } from '../../utils/text';
-import { formatDate } from '../../utils/content';
+import { buildCategoryIndex, formatDate, groupNotesByCategory, noteCategory } from '../../utils/content';
+import CategoryNav from '../../components/CategoryNav.astro';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -18,51 +19,116 @@ const words = countWords(note.body ?? '');
 const minutes = readingMinutes(words);
 
 const all = await getCollection('notes');
-const sorted = all.sort((a, b) => a.data.order - b.data.order);
-const idx = sorted.findIndex((n) => n.id === note.id);
-const prev = sorted[idx - 1];
-const next = sorted[idx + 1];
+const numbering = buildCategoryIndex(all);
+const groups = groupNotesByCategory(all);
+const currentCat = noteCategory(note);
+const catNotes = groups.find((group) => group.category === currentCat)?.notes ?? [];
+const localIndex = catNotes.findIndex((item) => item.id === note.id);
+const prev = catNotes[localIndex - 1];
+const next = catNotes[localIndex + 1];
+const chapterNo = numbering.get(note.id) ?? 1;
+const chapterLabel = `第 ${String(chapterNo).padStart(2, '0')} 话`;
 ---
 
-<Base title={note.data.title} description={note.data.summary}>
-  <article class="reveal mx-auto max-w-[47rem]">
-    <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">← 返回知识笔记</a>
+<Base title={note.data.title} description={note.data.summary || note.data.title}>
+  <div class="mx-auto w-full max-w-5xl lg:grid lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+    <aside class="sticky top-24 hidden lg:block">
+      <p class="kana mb-2">分类 · CATEGORY</p>
+      <CategoryNav groups={groups} />
+    </aside>
 
-    <header class="mt-5 rounded-[28px] border border-[#ecdccd] bg-white/85 p-7 md:p-9">
-      <span class="chapter">第 {String(note.data.order).padStart(2, '0')} 话</span>
-      <h1 class="mt-3 font-cute text-3xl leading-snug md:text-4xl">{note.data.title}</h1>
-      <p class="mt-3 text-[#8a7a80]">{note.data.summary}</p>
-      <div class="mt-4 flex flex-wrap gap-2">
-        <span class="pill">{formatDate(note.data.date)}</span>
-        <span class="pill">{words} 字</span>
-        <span class="pill">约 {minutes} 分钟读完</span>
+    <article class="reveal min-w-0">
+      <div class="flex items-center justify-between gap-3">
+        <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">← 返回 ∑数屋</a>
+
+        <button
+          type="button"
+          id="cat-mobile-toggle"
+          aria-expanded="false"
+          aria-controls="cat-mobile-panel"
+          aria-label="分类列表"
+          class="inline-flex items-center gap-1.5 rounded-full border-[1.5px] border-[#2b2333] bg-white px-3 py-1.5 lg:hidden"
+        >
+          <span class="flex items-center gap-1" aria-hidden="true">
+            <i class="h-[5px] w-[5px] rounded-full bg-[#2b2333]"></i>
+            <i class="h-[5px] w-[5px] rounded-full bg-[#2b2333]"></i>
+            <i class="h-[5px] w-[5px] rounded-full bg-[#2b2333]"></i>
+          </span>
+        </button>
       </div>
-    </header>
 
-    <div class="prose-cute mt-6 rounded-[18px] border border-[#f1e3d8] bg-white/90 p-7 md:p-10">
-      <Content />
-    </div>
+      <div id="cat-mobile-panel" hidden class="mt-3 lg:hidden">
+        <CategoryNav groups={groups} />
+      </div>
 
-    <nav class="mt-8 grid gap-3 sm:grid-cols-2">
-      {
-        prev ? (
-          <a href={url(`/notes/${prev.id}/`)} class="card card-lift p-5">
-            <p class="text-xs text-[#b6a8bd]">上一篇</p>
-            <p class="mt-1 font-cute">{prev.data.title}</p>
-          </a>
-        ) : (
-          <div></div>
-        )
+      <header class="mt-5 rounded-[28px] border border-[#ecdccd] bg-white/85 p-7 md:p-9">
+        <span class="chapter">{chapterLabel}</span>
+        <h1 class="mt-3 font-cute text-3xl leading-snug md:text-4xl">{note.data.title}</h1>
+        {
+          note.data.summary && <p class="mt-3 text-[#8a7a80]">{note.data.summary}</p>
+        }
+        <div class="mt-4 flex flex-wrap gap-2">
+          <span class="pill">{formatDate(note.data.date)}</span>
+          <span class="pill">{words} 字</span>
+          <span class="pill">约 {minutes} 分钟读完</span>
+        </div>
+      </header>
+
+      <div class="prose-cute mt-6 rounded-[18px] border border-[#f1e3d8] bg-white/90 p-7 md:p-10">
+        <Content />
+      </div>
+
+      <nav class:list={['mt-8 grid gap-3', prev && next && 'sm:grid-cols-2']}>
+        {
+          prev && (
+            <a href={url(`/notes/${prev.id}/`)} class="card card-lift p-5">
+              <p class="text-xs text-[#b6a8bd]">上一篇（{currentCat}）</p>
+              <p class="mt-1 font-cute">{prev.data.title}</p>
+            </a>
+          )
+        }
+        {
+          next && (
+            <a href={url(`/notes/${next.id}/`)} class="card card-lift p-5 sm:text-right">
+              <p class="text-xs text-[#b6a8bd]">下一篇（{currentCat}）</p>
+              <p class="mt-1 font-cute">{next.data.title}</p>
+            </a>
+          )
+        }
+      </nav>
+    </article>
+  </div>
+
+  <script is:inline>
+    (() => {
+      /* 分类方框：点开二级列表，同一组内一次只开一个 */
+      document.querySelectorAll('[data-cat-btn]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const nav = btn.closest('[data-catnav]');
+          if (!nav) return;
+          const category = btn.getAttribute('data-cat-btn');
+          const lists = [...nav.querySelectorAll('[data-cat-list]')];
+          const list = lists.find((el) => el.getAttribute('data-cat-list') === category);
+          if (!list) return;
+          lists.forEach((el) => {
+            if (el !== list) el.hidden = true;
+          });
+          list.hidden = !list.hidden;
+          nav.querySelectorAll('[data-cat-btn]').forEach((other) => {
+            other.setAttribute('aria-expanded', String(other === btn && !list.hidden));
+          });
+        });
+      });
+
+      /* 移动端：三个点展开 */
+      const toggle = document.getElementById('cat-mobile-toggle');
+      const panel = document.getElementById('cat-mobile-panel');
+      if (toggle && panel) {
+        toggle.addEventListener('click', () => {
+          panel.hidden = !panel.hidden;
+          toggle.setAttribute('aria-expanded', String(!panel.hidden));
+        });
       }
-      {
-        next ? (
-          <a href={url(`/notes/${next.id}/`)} class="card card-lift p-5 sm:text-right">
-            <p class="text-xs text-[#b6a8bd]">下一篇</p>
-            <p class="mt-1 font-cute">{next.data.title}</p>
-          </a>
-        ) : (
-          <div></div>
-        )
-      }
-    </nav>
-  </article></Base>
+    })();
+  </script>
+</Base>

@@ -3,6 +3,7 @@ import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import { getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
+import SumTitle from '../components/SumTitle.astro';
 
 const notes = await getNotesWithWords();
 const diary = await getDiaryEntries();
@@ -14,8 +15,8 @@ const latestDiary = diary[0];
 const sections = [
   {
     href: '/notes/',
-    title: '知识笔记',
-    desc: '专升本高数的复习记录',
+    title: '∑数屋',
+    desc: '知识、随记与灵感的小抽屉',
     img: '/assets/art/star-portrait.webp',
   },
   {
@@ -72,7 +73,7 @@ const more = [
             <img src={url(section.img)} alt="" class="h-full w-full object-cover object-center" loading="lazy" />
           </div>
           <div class="p-2 sm:p-5">
-            <h2 class="font-cute text-[12px] leading-tight sm:text-lg">{section.title}</h2>
+            <h2 class="font-cute text-[12px] leading-tight sm:text-lg">{section.title === '∑数屋' ? <SumTitle /> : section.title}</h2>
             <p class="mt-1 hidden text-sm text-[#8a7a80] sm:block">{section.desc}</p>
           </div>
         </a>
@@ -81,9 +82,12 @@ const more = [
   </section>
 
   <section class="mt-16">
-    <div class="reveal flex items-end justify-between">
-      <p class="kana">NOTES · ノート</p><h2 class="sec-title">最新的笔记</h2>
-      <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">全部 →</a>
+    <div class="reveal">
+      <p class="kana">NOTES · ノート</p>
+      <div class="mt-1 flex items-end justify-between gap-3">
+        <h2 class="sec-title">最新的笔记</h2>
+        <a href={url('/notes/')} class="text-sm text-[#ff6f9c] hover:underline">全部 →</a>
+      </div>
     </div>
 
     <div class="mt-4 grid grid-cols-3 gap-2.5 md:gap-4">
@@ -94,9 +98,17 @@ const more = [
             class="reveal card card-lift flex flex-col p-2 sm:p-6"
             style={`transition-delay: ${index * 70}ms`}
           >
-            <span class="tag hidden sm:inline-block">{note.data.chapter}</span>
+            {
+              note.data.chapter && (
+                <span class="tag hidden sm:inline-block">{note.data.chapter}</span>
+              )
+            }
             <h3 class="mt-0 font-cute text-[12px] leading-tight sm:mt-3 sm:text-lg sm:leading-snug">{note.data.title}</h3>
-            <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#8a7a80] sm:block">{note.data.summary}</p>
+            {
+              note.data.summary && (
+                <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#8a7a80] sm:block">{note.data.summary}</p>
+              )
+            }
             <span class="mt-2 text-[10px] text-[#b6a8bd] sm:mt-4 sm:text-xs">{note.words} 字</span>
           </a>
         ))

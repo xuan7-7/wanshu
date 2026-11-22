@@ -545,3 +545,164 @@ main {
 footer {
   margin-top: auto;
 }
+
+/* 数屋分类标签 */
+.cat-tab.is-active {
+  background: #2b2333;
+  border-color: #2b2333;
+  color: #fff;
+}
+
+html[data-theme='dark'] .cat-tab {
+  background: #241f31;
+  border-color: #3a3448;
+  color: #cbb9d8;
+}
+
+html[data-theme='dark'] .cat-tab.is-active {
+  background: #ece7f5;
+  border-color: #ece7f5;
+  color: #1b1822;
+}
+
+
+/* ∑ 立起来：两种形态都占满同一个方形槽位（横向拉伸到方形），进入 ∑数屋 / 悬停时立回 ∑ */
+.sum-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36em;
+}
+
+.sum-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  overflow: visible;
+}
+
+.sum-glyph__inner {
+  display: inline-block;
+  font-size: 1.05em;
+  line-height: 1;
+  transform: rotate(0deg) scaleX(1.49);
+  transform-origin: center;
+  transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.25, 1);
+}
+
+html:not([data-section='notes']) .sum-glyph__inner {
+  transform: rotate(-90deg) scaleX(1.49);
+}
+
+a:hover .sum-glyph__inner,
+button:hover .sum-glyph__inner {
+  transform: rotate(0deg) scaleX(1.49);
+}
+
+html[data-section='notes'] .sum-glyph__inner {
+  animation: sum-stand-up 0.5s cubic-bezier(0.22, 0.8, 0.25, 1) both;
+}
+
+@keyframes sum-stand-up {
+  from {
+    transform: rotate(-90deg) scaleX(1.49);
+  }
+  to {
+    transform: rotate(0deg) scaleX(1.49);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sum-glyph,
+  .sum-glyph__inner {
+    transition: none;
+    animation: none;
+  }
+}
+
+
+/* 暗色补充：深色描边、深色底片、反色文字 */
+html[data-theme='dark'] [class*='border-[#2b2333]'],
+html[data-theme='dark'] [class*='border-[#2f2740]'] {
+  border-color: #4a4358 !important;
+}
+
+/* 深色底片在暗色下翻成浅色，文字反过来 */
+html[data-theme='dark'] [class*='bg-[#2b2333]'],
+html[data-theme='dark'] [class*='bg-[#2f2740]'] {
+  background-color: #ece7f5 !important;
+}
+
+html[data-theme='dark'] [class*='bg-[#2b2333]'].text-white,
+html[data-theme='dark'] [class*='bg-[#2f2740]'].text-white,
+html[data-theme='dark'] [class*='bg-[#2b2333]'] [class*='text-white'],
+html[data-theme='dark'] [class*='bg-[#2f2740]'] [class*='text-white'],
+html[data-theme='dark'] [class*='bg-[#2b2333]'] .text-white {
+  color: #1b1822 !important;
+}
+
+/* 粉色底片保持深色字 */
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'] {
+  background-color: #ff9fbf !important;
+}
+
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'] [class*='text-[#2b2333]'],
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'][class*='text-[#2b2333]'] {
+  color: #1b1822 !important;
+}
+
+html[data-theme='dark'] [class*='border-white/80'] {
+  border-color: #3a3448 !important;
+}
+
+
+/* 暗色补充 2：彩色强调在深色底上提亮 */
+html[data-theme='dark'] [class*='text-[#33406e]'] {
+  color: #9db2ff !important;
+}
+
+html[data-theme='dark'] [class*='text-[#3f9c7c]'] {
+  color: #7fdcc0 !important;
+}
+
+html[data-theme='dark'] [class*='text-[#ff5c8d]'],
+html[data-theme='dark'] [class*='text-[#ff6f9c]'] {
+  color: #ffa3c2 !important;
+}
+
+html[data-theme='dark'] [class*='text-[#c9772f]'] {
+  color: #ffbd85 !important;
+}
+
+html[data-theme='dark'] [class*='text-[#8a6fbf]'] {
+  color: #c3a9f5 !important;
+}
+
+html[data-theme='dark'] [class*='text-[#7fbf9a]'] {
+  color: #8fd9b4 !important;
+}
+
+
+/* 粉色底片里的浅灰字压深 */
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'] [class*='text-[#7a6b74]'],
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'] [class*='text-[#a898a2]'],
+html[data-theme='dark'] [class*='bg-[#ff9fbf]'] [class*='text-[#6d5d63]'] {
+  color: #5b3a48 !important;
+}
+
+
+/* 图片防下载：禁拖拽、禁长按菜单、禁选中；摄影图不接收指针事件（右键菜单不会出现"保存图片"） */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+figure img,
+.site-bg img {
+  pointer-events: none;
+}

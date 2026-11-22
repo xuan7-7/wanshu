@@ -2,7 +2,7 @@
 import { url } from '../utils/url';
 import '../styles/global.css';
 import Lucide from '../components/Lucide.astro';
-import visitStats from '../data/visit-stats.json';
+import SumTitle from '../components/SumTitle.astro';
 import zcoolFont from '../assets/fonts/zcool-subset.woff2?url';
 
 interface Props {
@@ -12,10 +12,11 @@ interface Props {
 
 const { title, description = '七七的万数屋 · 知识、日子与光。' } = Astro.props;
 const path = Astro.url.pathname;
+const inNotes = path.includes('/notes');
 
 const nav = [
   { href: '/', label: '首页', icon: 'home' as const },
-  { href: '/notes/', label: '知识笔记', icon: 'book' as const },
+  { href: '/notes/', label: '∑数屋', icon: 'book' as const },
   { href: '/diary/', label: '万数日记', icon: 'notebook' as const },
   { href: '/photos/', label: '摄影分享', icon: 'camera' as const },
   { href: '/links/', label: '友链', icon: 'link' as const },
@@ -26,7 +27,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-section={inNotes ? 'notes' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -105,7 +106,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
                 ]}
               >
                 <Lucide name={item.icon} size={15} class="shrink-0" />
-                {item.label}
+                {item.label === '∑数屋' ? <SumTitle /> : item.label}
               </a>
             ))
           }
@@ -164,7 +165,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
                   ]}
                 >
                   <Lucide name={item.icon} size={15} class="shrink-0" />
-                  {item.label}
+                  {item.label === '∑数屋' ? <SumTitle /> : item.label}
                 </a>
               ))
             }
@@ -327,5 +328,70 @@ const targets = document.querySelectorAll<HTMLElement>('.reveal');
         setInterval(render, 1000);
       })();
     </script>
+    <script is:inline data-close-secondary>
+      (() => {
+        const closeAll = () => {
+          document.querySelectorAll('[data-catnav]').forEach((nav) => {
+            nav.querySelectorAll('[data-cat-list]').forEach((list) => {
+              list.hidden = true;
+            });
+            nav.querySelectorAll('[data-cat-btn]').forEach((btn) => {
+              btn.setAttribute('aria-expanded', 'false');
+            });
+          });
+
+          const catPanel = document.getElementById('cat-mobile-panel');
+          const catToggle = document.getElementById('cat-mobile-toggle');
+          if (catPanel && !catPanel.hidden) {
+            catPanel.hidden = true;
+            if (catToggle) catToggle.setAttribute('aria-expanded', 'false');
+          }
+
+          const moreWrap = document.getElementById('cat-more');
+          const moreBtn = document.getElementById('cat-more-btn');
+          if (moreWrap && !moreWrap.hidden) {
+            moreWrap.hidden = true;
+            if (moreBtn) moreBtn.setAttribute('aria-expanded', 'false');
+          }
+
+          const navPanel = document.getElementById('nav-panel');
+          const navToggle = document.getElementById('nav-toggle');
+          if (navPanel && !navPanel.classList.contains('hidden')) {
+            navPanel.classList.add('hidden');
+            if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+          }
+        };
+
+        document.addEventListener('click', (event) => {
+          const target = event.target;
+          if (!(target instanceof Element)) return;
+          if (target.closest('[data-catnav]')) return;
+          if (target.closest('#cat-mobile-panel') || target.closest('#cat-mobile-toggle')) return;
+          if (target.closest('#cat-more') || target.closest('#cat-more-btn')) return;
+          if (target.closest('#nav-panel') || target.closest('#nav-toggle')) return;
+          closeAll();
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeAll();
+        });
+      })();
+    </script>
+
+    <script is:inline data-img-guard>
+      (() => {
+        const risky = (target) =>
+          target instanceof Element && (target.tagName === 'IMG' || target.closest('figure'));
+
+        document.addEventListener('contextmenu', (event) => {
+          if (risky(event.target)) event.preventDefault();
+        });
+
+        document.addEventListener('dragstart', (event) => {
+          if (event.target instanceof HTMLImageElement) event.preventDefault();
+        });
+      })();
+    </script>
+
   </body>
 </html>

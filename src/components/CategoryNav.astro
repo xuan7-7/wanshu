@@ -1,0 +1,68 @@
+---
+import { url } from '../utils/url';
+import Lucide from './Lucide.astro';
+
+interface Props {
+  groups: { category: string; notes: { id: string; data: { title: string } }[] }[];
+}
+
+const { groups } = Astro.props;
+---
+
+<div data-catnav class="space-y-2">
+  {
+    groups.map((group) => (
+      <div class="card overflow-hidden">
+        <button
+          type="button"
+          data-cat-btn={group.category}
+          aria-expanded="false"
+          class="flex w-full items-center justify-between gap-2 px-4 py-3 text-left"
+        >
+          <span class="font-cute text-sm">{group.category}</span>
+          <span class="flex items-center gap-2 text-xs text-[#7a6b74]">
+            {group.notes.length} 篇
+            <Lucide name="chevron" size={14} class="cat-chev" />
+          </span>
+        </button>
+
+        <ul data-cat-list={group.category} hidden class="border-t border-[#f1e3d8] py-1">
+          {group.notes.slice(0, 5).map((note) => (
+            <li>
+              <a
+                class="block truncate px-4 py-1.5 text-xs text-[#574d5f] hover:text-[#b8467a]"
+                href={url(`/notes/${note.id}/`)}
+                title={note.data.title}
+              >
+                {note.data.title}
+              </a>
+            </li>
+          ))}
+          {group.notes.length > 5 && (
+            <li>
+              <a
+                class="block px-4 py-1.5 text-xs text-[#b8467a]"
+                href={url(`/notes/?cat=${encodeURIComponent(group.category)}`)}
+              >
+                更多 →
+              </a>
+            </li>
+          )}
+          {group.notes.length === 0 && (
+            <li class="px-4 py-1.5 text-xs text-[#a898a2]">还没有该类型记录。</li>
+          )}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  :global(button[aria-expanded='true'] .cat-chev) {
+    transform: rotate(180deg);
+  }
+
+  :global(.cat-chev) {
+    transition: transform 0.2s ease;
+  }
+</style>

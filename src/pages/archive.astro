@@ -1,16 +1,17 @@
 ---
 import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
-import { getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
+import { buildCategoryIndex, getNotesWithWords, getDiaryEntries, formatDate } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
 
 const notes = await getNotesWithWords();
 const diary = await getDiaryEntries();
+const numbering = buildCategoryIndex(notes);
 
 type Item = { type: string; title: string; href: string; date: Date };
 const items: Item[] = [
   ...notes.map((n) => ({
-    type: '第 ' + String(n.data.order).padStart(2, '0') + ' 话',
+    type: '第 ' + String(numbering.get(n.id) ?? 1).padStart(2, '0') + ' 话',
     title: n.data.title,
     href: `/notes/${n.id}/`,
     date: n.data.date,

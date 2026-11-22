@@ -1,84 +1,131 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { getNotesWithWords } from '../../utils/content';
+import { buildCategoryIndex, getNotesWithWords } from '../../utils/content';
 import { url } from '../../utils/url';
 import Lucide from '../../components/Lucide.astro';
 
 const notes = await getNotesWithWords();
+const numbering = buildCategoryIndex(notes);
+const categories = ['知识梳理', '随记', '碎碎念', '灵感'];
 ---
 
-<Base title="知识笔记" description="专升本高等数学的复习笔记。">
-  <section class="reveal flex items-start justify-between gap-5">
-    <div class="min-w-0 flex-1">
-      <p class="kana mb-1">NOTES · ノート</p>
-      <span class="pill"><Lucide name="book" size={14} class="text-[#ff6f9c]" /> 知识笔记</span>
-      <h1 class="mt-3 font-cute text-3xl md:text-4xl">专升本高数复习记录</h1>
-      <p class="mt-3 max-w-2xl text-[#574d5f]">
-        广东普通专升本高等数学的复习记录，一章一章啃。
-      </p>
+<Base title="∑数屋" description="知识、随记、碎碎念与灵感。">
+  <section class="reveal">
+    <p class="kana mb-2">∑ · 数屋</p>
+
+    <div class="flex items-center gap-2">
+      <div id="cat-tabs" class="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden" role="tablist" aria-label="按分类浏览">
+        {
+          categories.map((cat) => (
+            <button
+              type="button"
+              data-cat={cat}
+              class="cat-tab inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-full border-[1.5px] border-[#2b2333] bg-white px-2 text-[13px] leading-none text-[#574d5f] transition-colors duration-150 sm:px-3 sm:text-sm"
+            >
+              {cat}
+            </button>
+          ))
+        }
+      </div>
+
+      <button
+        type="button"
+        id="cat-more-btn"
+        hidden
+        aria-label="更多分类"
+        aria-expanded="false"
+        aria-controls="cat-more"
+        class="grid h-9 w-9 shrink-0 place-items-center rounded-full border-[1.5px] border-[#2b2333] bg-white text-[#2b2333]"
+      >
+        <span class="flex items-center gap-[3px]" aria-hidden="true">
+          <i class="h-1 w-1 rounded-full bg-current"></i>
+          <i class="h-1 w-1 rounded-full bg-current"></i>
+          <i class="h-1 w-1 rounded-full bg-current"></i>
+        </span>
+      </button>
+
+      <div class="flex h-9 shrink-0 items-center gap-1 rounded-full border-[1.5px] border-[#2b2333] bg-white px-1" role="group" aria-label="切换布局">
+        <button
+          type="button"
+          id="view-list"
+          data-view="list"
+          aria-pressed="false"
+          aria-label="列表"
+          class="inline-flex h-7 items-center gap-1 rounded-full px-2 text-xs leading-none transition-colors duration-150 sm:px-2.5"
+        >
+          <Lucide name="list" size={13} />
+          <span class="hidden sm:inline">列表</span>
+        </button>
+        <button
+          type="button"
+          id="view-grid"
+          data-view="grid"
+          aria-pressed="true"
+          aria-label="宫格"
+          class="inline-flex h-7 items-center gap-1 rounded-full px-2 text-xs leading-none transition-colors duration-150 sm:px-2.5"
+        >
+          <Lucide name="grid" size={13} />
+          <span class="hidden sm:inline">宫格</span>
+        </button>
+      </div>
     </div>
 
-    <div class="flex shrink-0 items-center gap-1 rounded-full border-[1.5px] border-[#2b2333] bg-white p-1" role="group" aria-label="切换布局">
-      <button
-        type="button"
-        id="view-list"
-        data-view="list"
-        aria-pressed="false"
-        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors duration-150"
-      >
-        <Lucide name="list" size={13} />
-        列表
-      </button>
-      <button
-        type="button"
-        id="view-grid"
-        data-view="grid"
-        aria-pressed="true"
-        class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs transition-colors duration-150"
-      >
-        <Lucide name="grid" size={13} />
-        宫格
-      </button>
-    </div>
+    <div id="cat-more" hidden class="mt-2 flex flex-wrap items-center gap-1.5"></div>
   </section>
 
+  <p id="notes-empty" class="mt-8 hidden text-sm text-[#7a6b74]">还没有该类型记录。</p>
+
   <!-- 列表视图 -->
-  <div id="notes-list" class="mt-10 hidden space-y-5">
+  <div id="notes-list" class="mt-8 hidden space-y-5">
     {
       notes.map((note) => (
         <a
           href={url(`/notes/${note.id}/`)}
+          data-category={note.data.category}
           class="reveal card card-lift flex flex-col gap-4 p-6 md:flex-row md:items-center"
         >
-          <span class="grid h-14 w-14 shrink-0 place-items-center rounded-[10px] border-[1.5px] border-[#2b2333] bg-[#ff9fbf] font-cute text-[11px] leading-tight text-[#2b2333]">
-            第<br />{String(note.data.order).padStart(2, '0')} 话
-          </span>
+          <span class="chapter shrink-0 self-start whitespace-nowrap">第 {String(numbering.get(note.id) ?? 1).padStart(2, '0')} 话</span>
           <div class="min-w-0 flex-1">
-            <span class="tag">{note.data.chapter}</span>
-            <h2 class="mt-2 font-cute text-xl leading-snug">{note.data.title}</h2>
-            <p class="mt-1 text-sm leading-relaxed text-[#574d5f]">{note.data.summary}</p>
+            <div class="hidden flex-wrap items-center gap-2 sm:flex">
+              <span class="tag">{note.data.category}</span>
+              {note.data.chapter && <span class="tag">{note.data.chapter}</span>}
+            </div>
+            <h2 class="mt-2 font-cute text-[15px] leading-snug sm:text-xl">{note.data.title}</h2>
+            {
+              note.data.summary && (
+                <p class="mt-1 hidden text-sm leading-relaxed text-[#574d5f] sm:block">{note.data.summary}</p>
+              )
+            }
           </div>
-          <span class="text-sm text-[#7a6b74] md:text-right">{note.words} 字</span>
+          <span class="text-xs text-[#7a6b74] sm:text-sm md:text-right">{note.words} 字</span>
         </a>
       ))
     }
   </div>
 
   <!-- 宫格视图 -->
-  <div id="notes-grid" class="mt-10 grid grid-cols-3 gap-2.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+  <div id="notes-grid" class="mt-8 grid grid-cols-3 gap-2.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
     {
       notes.map((note) => (
-        <a href={url(`/notes/${note.id}/`)} class="reveal card card-lift flex h-full flex-col p-3 sm:p-5">
+        <a
+          href={url(`/notes/${note.id}/`)}
+          data-category={note.data.category}
+          class="reveal card card-lift flex h-full flex-col p-3 sm:p-5"
+        >
           <div class="hidden items-center justify-between sm:flex">
-            <span class="chapter">第 {String(note.data.order).padStart(2, '0')} 话</span>
+            <span class="chapter">第 {String(numbering.get(note.id) ?? 1).padStart(2, '0')} 话</span>
             <span class="text-[11px] text-[#a898a2]">{note.words} 字</span>
           </div>
           <h2 class="mt-0 font-cute text-[13px] leading-snug sm:mt-3 sm:text-lg">{note.data.title}</h2>
-          <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#574d5f] sm:block">{note.data.summary}</p>
+          {
+            note.data.summary && (
+              <p class="mt-2 hidden flex-1 text-sm leading-relaxed text-[#574d5f] sm:block">{note.data.summary}</p>
+            )
+          }
           <span class="mt-2 text-[10px] text-[#a898a2] sm:hidden">{note.words} 字</span>
           <span class="mt-3 hidden items-center gap-1 text-xs text-[#b8467a] sm:inline-flex">
             <Lucide name="book" size={12} />
-            {note.data.chapter}
+            {note.data.category}
           </span>
         </a>
       ))
@@ -92,17 +139,95 @@ const notes = await getNotesWithWords();
       const grid = document.getElementById('notes-grid');
       const btnList = document.getElementById('view-list');
       const btnGrid = document.getElementById('view-grid');
-      if (!list || !grid || !btnList || !btnGrid) return;
+      const tabsWrap = document.getElementById('cat-tabs');
+      const moreBtn = document.getElementById('cat-more-btn');
+      const moreWrap = document.getElementById('cat-more');
+      const empty = document.getElementById('notes-empty');
+      if (!list || !grid || !btnList || !btnGrid || !tabsWrap || !moreBtn || !moreWrap) return;
 
-      const active = ['bg-[#2f2740]', 'text-white'];
+      const allTabs = [...document.querySelectorAll('[data-cat]')];
+      const cards = [...document.querySelectorAll('[data-category]')];
+      const active = ['bg-[#2b2333]', 'text-white'];
       const idle = ['text-[#574d5f]'];
 
-      const apply = (view) => {
+      /* 分类筛选 */
+      const applyCat = (cat) => {
+        let shown = 0;
+        cards.forEach((card) => {
+          const on = card.getAttribute('data-category') === cat;
+          card.classList.toggle('hidden', !on);
+          if (on) shown++;
+        });
+        if (empty) empty.classList.toggle('hidden', shown > 0);
+        allTabs.forEach((tab) => {
+          tab.classList.toggle('is-active', tab.getAttribute('data-cat') === cat);
+        });
+      };
+
+      const requested = new URLSearchParams(location.search).get('cat');
+      const initial = requested && allTabs.some((t) => t.getAttribute('data-cat') === requested) ? requested : '知识梳理';
+      applyCat(initial);
+
+      allTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          applyCat(tab.getAttribute('data-cat'));
+          moreWrap.hidden = true;
+          moreBtn.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      /* 分类数量多时：放不下的收进「⋯」，展开后另起一行 */
+      const layoutTabs = () => {
+        allTabs.forEach((tab) => {
+          tab.hidden = false;
+          if (tab.parentElement !== tabsWrap) tabsWrap.appendChild(tab);
+        });
+        moreWrap.hidden = true;
+        moreBtn.setAttribute('aria-expanded', 'false');
+        moreBtn.hidden = true;
+
+        const gap = 6;
+        const dotsW = moreBtn.offsetWidth || 32;
+        const total = allTabs.reduce((sum, tab) => sum + tab.offsetWidth + gap, 0);
+        const avail = tabsWrap.clientWidth;
+
+        if (total - gap <= avail) return;
+
+        const limit = avail - dotsW - gap;
+        let used = 0;
+        const overflow = [];
+        allTabs.forEach((tab) => {
+          const w = tab.offsetWidth + gap;
+          if (overflow.length === 0 && used + w <= limit) {
+            used += w;
+          } else {
+            overflow.push(tab);
+          }
+        });
+
+        if (!overflow.length) return;
+        moreBtn.hidden = false;
+        overflow.forEach((tab) => moreWrap.appendChild(tab));
+      };
+
+      moreBtn.addEventListener('click', () => {
+        moreWrap.hidden = !moreWrap.hidden;
+        moreBtn.setAttribute('aria-expanded', String(!moreWrap.hidden));
+      });
+
+      layoutTabs();
+      let resizeTimer = 0;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(layoutTabs, 150);
+      });
+
+      /* 布局切换 */
+      const applyView = (view) => {
         const isGrid = view === 'grid';
         list.classList.toggle('hidden', isGrid);
         grid.classList.toggle('hidden', !isGrid);
         grid.classList.toggle('grid', isGrid);
-
         [btnList, btnGrid].forEach((btn) => {
           const on = (btn.dataset.view === 'grid') === isGrid;
           btn.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -111,15 +236,19 @@ const notes = await getNotesWithWords();
         });
       };
 
-      let saved = 'grid';
-      try { saved = localStorage.getItem(KEY) || 'grid'; } catch {}
-      apply(saved);
+      let view = 'grid';
+      try {
+        view = localStorage.getItem(KEY) || 'grid';
+      } catch {}
+      applyView(view);
 
       [btnList, btnGrid].forEach((btn) => {
         btn.addEventListener('click', () => {
-          const view = btn.dataset.view || 'list';
-          apply(view);
-          try { localStorage.setItem(KEY, view); } catch {}
+          const next = btn.dataset.view || 'list';
+          applyView(next);
+          try {
+            localStorage.setItem(KEY, next);
+          } catch {}
         });
       });
     })();

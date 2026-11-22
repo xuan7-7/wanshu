@@ -24,10 +24,11 @@ import {
   NotebookPen,
   Sun,
   MoonStar,
+  ChevronDown,
 } from 'lucide-astro';
 
 interface Props {
-  name: 'home' | 'github' | 'mail' | 'copy' | 'check' | 'external' | 'grid' | 'list' | 'notebook' | 'sun' | 'moon' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles';
+  name: 'home' | 'github' | 'mail' | 'copy' | 'check' | 'external' | 'grid' | 'list' | 'notebook' | 'sun' | 'moon' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles' | 'chevron';
   size?: number;
   class?: string;
 }
@@ -59,6 +60,7 @@ const icons = {
   image: ImageIcon,
   leaf: Leaf,
   sparkles: Sparkles,
+  chevron: ChevronDown,
 };
 
 const Cmp = icons[name];

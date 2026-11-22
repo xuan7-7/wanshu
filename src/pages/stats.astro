@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import { url } from '../utils/url';
 import { getNotesWithWords } from '../utils/content';
 import Lucide from '../components/Lucide.astro';
-import visitStats from '../data/visit-stats.json';
 
 const notes = await getNotesWithWords();
 const totalWords = notes.reduce((sum, note) => sum + note.words, 0);

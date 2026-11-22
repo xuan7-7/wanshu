@@ -2,6 +2,7 @@
 import { url } from '../utils/url';
 import Base from '../layouts/Base.astro';
 import Lucide from '../components/Lucide.astro';
+import SumTitle from '../components/SumTitle.astro';
 
 const poem = `人生视频，时光进度，
 思绪宛如网速，遇到挫折莫怕，
@@ -12,15 +13,21 @@ const poem = `人生视频，时光进度，
 幸得来此人间游，不该枉此走一遭。`;
 
 const cards = [
-  { icon: 'book', title: '知识笔记', desc: '专升本高数的复习记录，一章一章慢慢啃。', href: '/notes/' },
+  { icon: 'book', title: '∑数屋', desc: '知识、随记、碎碎念与灵感。', href: '/notes/' },
   { icon: 'moon', title: '万数日记', desc: '按时间排列的碎碎念，想到哪写到哪。', href: '/diary/' },
   { icon: 'camera', title: '摄影分享', desc: '相框已经备好，专等好看的光。', href: '/photos/' },
 ];
 ---
 
 <Base title="关于" description="关于七七与万数屋。">
-  <section class="reveal overflow-hidden rounded-[1.8rem] border border-[#ffe7d3] bg-[#f6e6d0]">
-    <div class="grid items-center gap-6 p-7 md:grid-cols-[1fr_260px] md:p-10">
+  <section class="reveal relative overflow-hidden rounded-[1.8rem] md:min-h-[330px]">
+    <img
+      src={url('/assets/about-hero.webp')}
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 h-full w-full object-cover object-[72%_50%] md:object-[50%_0%]"
+    />
+    <div class="relative p-7 md:p-10">
       <div>
         <span class="pill"><Lucide name="cat" size={14} class="text-[#ff6f9c]" /> 关于</span>
         <h1 class="mt-4 font-cute text-3xl md:text-4xl">七七的万数屋</h1>
@@ -28,12 +35,6 @@ const cards = [
           一间放知识、日子与光的小屋子。名字取自「万物有数」——日子有数，题目有数，喜欢的东西也有数。
         </p>
       </div>
-      <img
-        src={url('/assets/avatar-large.webp')}
-        alt="七七"
-        class="mx-auto w-52 rounded-[1.4rem] object-cover shadow-[0_20px_40px_-30px_rgba(60,40,80,0.9)]"
-        loading="lazy"
-      />
     </div>
   </section>
 
@@ -53,7 +54,7 @@ const cards = [
       cards.map((card, index) => (
         <a href={url(card.href)} class="reveal card card-lift p-6" style={`transition-delay: ${index * 55}ms`}>
           <p class="w-fit text-[#ff6f9c]"><Lucide name={card.icon} size={22} /></p>
-          <h3 class="mt-2 font-cute text-lg">{card.title}</h3>
+          <h3 class="mt-2 font-cute text-lg">{card.title === '∑数屋' ? <SumTitle /> : card.title}</h3>
           <p class="mt-1 text-sm text-[#8a7a80]">{card.desc}</p>
         </a>
       ))

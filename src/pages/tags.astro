@@ -18,7 +18,7 @@ for (const note of notes) {
 const tags = [...map.entries()].sort((a, b) => b[1].length - a[1].length);
 ---
 
-<Base title="标签" description="按标签浏览知识笔记。">
+<Base title="标签" description="按标签浏览∑数屋。">
   <section class="reveal flex items-start gap-5">
     <div class="min-w-0 flex-1">
       <p class="kana mb-1">TAGS · タグ</p>
@@ -47,7 +47,7 @@ const tags = [...map.entries()].sort((a, b) => b[1].length - a[1].length);
             {list.map((note) => (
               <a href={url(`/notes/${note.id}/`)} class="card card-lift p-4">
                 <p class="font-cute text-[#2b2333]">{note.data.title}</p>
-                <p class="mt-1 text-xs text-[#7a6b74]">{note.data.chapter}</p>
+                <p class="mt-1 text-xs text-[#7a6b74]">{note.data.chapter || note.data.category}</p>
               </a>
             ))}
           </div>
