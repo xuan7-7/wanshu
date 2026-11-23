@@ -24,4 +24,15 @@ const diary = defineCollection({
   }),
 });
 
-export const collections = { notes, diary };
+const skills = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/skills' }),
+  schema: z.object({
+    title: z.string(),
+    repo: z.string().url(),
+    summary: z.string().default(''),
+    tags: z.array(z.string()).default([]),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { notes, diary, skills };

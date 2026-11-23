@@ -58,7 +58,7 @@ html {
 }
 
 @media (min-width: 1280px) {
-  html { font-size: 17px; }
+  html { font-size: 16px; }
 }
 
 body {
@@ -66,7 +66,7 @@ body {
   flex-direction: column;
   font-family: var(--font-round);
   font-size: 1rem;
-  line-height: 1.85;
+  line-height: 1.75;
   color: var(--color-ink);
   background-color: var(--color-paper);
   min-height: 100vh;
@@ -349,8 +349,8 @@ body {
 
 /* ---------- article typography: measured to ~68 characters ---------- */
 .prose-cute {
-  font-size: 1.06rem;
-  line-height: 1.95;
+  font-size: 1rem;
+  line-height: 1.8;
   color: var(--color-ink-2);
   max-width: 68ch;
 }
@@ -378,6 +378,62 @@ body {
   padding: 0.1rem 0.35rem;
   border-radius: 0.35rem;
   font-size: 0.9em;
+}
+
+.prose-cute :where(pre) {
+  margin: 1.1rem 0;
+  padding: 1rem 1.15rem;
+  background: #fff7fa;
+  border: 1px solid #f3dfe7;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.prose-cute :where(pre code) {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+html[data-theme='dark'] .prose-cute :where(pre) {
+  background: #221d2c;
+  border-color: #3a3448;
+}
+
+/* 代码块复制按钮 */
+.code-wrap {
+  position: relative;
+  margin: 1.1rem 0;
+}
+
+.code-wrap pre {
+  margin: 0;
+}
+
+.code-copy {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.28);
+  color: #ffe1ec;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.code-copy:hover {
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .prose-cute :where(blockquote) {
@@ -413,7 +469,7 @@ body {
 /* ---------- 数学排版（GB 3102 / ISO 80000-2 / AMS 实践） ---------- */
 .prose-cute {
   /* 中文正文 1.5–2 倍行距，公式与文字混排不改变整段节奏 */
-  line-height: 1.9;
+  line-height: 1.8;
   text-spacing-trim: space-all;
 }
 

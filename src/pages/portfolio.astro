@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Lucide from '../components/Lucide.astro';
+
+const entries = (await getCollection('skills')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(
+  entries.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+---
+
+<Base title="作品集" description="七七做过的东西：website-dev-playbook 建站技能。">
+  <section class="reveal">
+    <p class="kana mb-1">WORKS · さくひん</p>
+    <span class="pill"><Lucide name="briefcase" size={14} class="text-[#ff6f9c]" /> 作品集</span>
+  </section>
+
+  {
+    rendered.map(({ entry, Content }) => (
+      <section class="reveal card mt-6 p-6 md:p-8">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <span class="tag">{entry.data.tags[0] ?? '作品'}</span>
+            <h2 class="mt-2 font-cute text-2xl">{entry.data.title}</h2>
+          </div>
+          <a
+            href={entry.data.repo}
+            target="_blank"
+            rel="noreferrer"
+            class="text-sm text-[#b8467a] hover:underline"
+          >
+            GitHub ↗
+          </a>
+        </div>
+
+        {entry.data.summary && (
+          <p class="mt-3 leading-relaxed text-[#4b4056]">{entry.data.summary}</p>
+        )}
+
+        <div class="prose-cute skills-content mt-4 rounded-[16px] border border-[#f1e3d8] bg-white/90 p-5 md:p-6">
+          <Content />
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-2">
+          {entry.data.tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Base>
+
+<script is:inline>
+  (() => {
+    const blocks = [...document.querySelectorAll('.skills-content pre')].filter(
+      (pre) => pre.getAttribute('data-language') === 'bash',
+    );
+    blocks.forEach((pre) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'code-wrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-copy';
+      btn.setAttribute('aria-label', '复制代码');
+      const copyIcon =
+        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>';
+      const doneIcon =
+        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+      btn.innerHTML = copyIcon;
+      btn.addEventListener('click', async () => {
+        const text = pre.innerText.replace(/\n+$/, '');
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+        btn.innerHTML = doneIcon;
+        btn.setAttribute('aria-label', '已复制');
+        setTimeout(() => {
+          btn.innerHTML = copyIcon;
+          btn.setAttribute('aria-label', '复制代码');
+        }, 1500);
+      });
+      wrap.appendChild(btn);
+    });
+  })();
+</script>
+

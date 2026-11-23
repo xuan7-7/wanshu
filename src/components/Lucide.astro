@@ -25,10 +25,11 @@ import {
   Sun,
   MoonStar,
   ChevronDown,
+  Briefcase,
 } from 'lucide-astro';
 
 interface Props {
-  name: 'home' | 'github' | 'mail' | 'copy' | 'check' | 'external' | 'grid' | 'list' | 'notebook' | 'sun' | 'moon' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles' | 'chevron';
+  name: 'home' | 'github' | 'mail' | 'copy' | 'check' | 'external' | 'grid' | 'list' | 'notebook' | 'sun' | 'moon' | 'book' | 'moon' | 'camera' | 'archive' | 'tag' | 'link' | 'message' | 'chart' | 'cat' | 'sprout' | 'image' | 'leaf' | 'sparkles' | 'chevron' | 'briefcase';
   size?: number;
   class?: string;
 }
@@ -61,6 +62,7 @@ const icons = {
   leaf: Leaf,
   sparkles: Sparkles,
   chevron: ChevronDown,
+  briefcase: Briefcase,
 };
 
 const Cmp = icons[name];
